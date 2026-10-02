@@ -1,0 +1,861 @@
+{
+  "about": "Golden cases for domain/checks.py. Each case starts from data/fixtures, applies the given captures in order, then runs checks on values. The expected list is exact, in order. Generated from the contract in specs/contracts/checks.md and reviewed by hand. Change a case only with the contract.",
+  "cases": [
+    {
+      "id": "inward-sample",
+      "description": "Sample inward sheet as read",
+      "given": [],
+      "doc_type": "inward",
+      "values": {
+        "supplier": "Navkar Colourchem",
+        "material": "Pigment Red 57:1",
+        "lot": "PR571-2409",
+        "qty": "150 kg",
+        "date": "24/09/2026",
+        "coa": "Strength 101.8%"
+      },
+      "expect": [
+        {
+          "level": "ok",
+          "id": "INWARD_OK",
+          "params": {
+            "lot": "PR571-2409",
+            "qty": "150",
+            "material": "Pigment Red 57:1"
+          }
+        }
+      ],
+      "can_save": true
+    },
+    {
+      "id": "inward-duplicate",
+      "description": "Lot already received",
+      "given": [],
+      "doc_type": "inward",
+      "values": {
+        "supplier": "Navkar Colourchem",
+        "material": "Pigment Red 57:1",
+        "lot": "PB153-2408",
+        "qty": "150 kg",
+        "date": "24/09/2026",
+        "coa": "Strength 101.8%"
+      },
+      "expect": [
+        {
+          "level": "error",
+          "id": "LOT_DUPLICATE",
+          "params": {
+            "lot": "PB153-2408"
+          }
+        }
+      ],
+      "can_save": false
+    },
+    {
+      "id": "inward-no-coa",
+      "description": "Missing CoA and unreadable weight",
+      "given": [],
+      "doc_type": "inward",
+      "values": {
+        "supplier": "Navkar Colourchem",
+        "material": "Pigment Red 57:1",
+        "lot": "PR571-2409",
+        "qty": "one fifty",
+        "date": "24/09/2026",
+        "coa": ""
+      },
+      "expect": [
+        {
+          "level": "error",
+          "id": "QTY_NOT_NUMBER",
+          "params": {}
+        },
+        {
+          "level": "warning",
+          "id": "COA_MISSING",
+          "params": {}
+        }
+      ],
+      "can_save": false
+    },
+    {
+      "id": "labdip-sample",
+      "description": "Sample lab dip sheet as read",
+      "given": [],
+      "doc_type": "labdip",
+      "values": {
+        "shade": "WS-6214",
+        "name": "Coral Red",
+        "customer": "Ashapura Plast",
+        "carrier": "PP homopolymer",
+        "recipe": "PR57:1 3.2%, TiO2 1.5%, PE wax 1.8%",
+        "ldr": "1:50 (2%)",
+        "de": "0.74",
+        "result": "Approved"
+      },
+      "expect": [
+        {
+          "level": "ok",
+          "id": "LABDIP_OK",
+          "params": {
+            "n": "3",
+            "let_down": "1:50 (2%)"
+          }
+        }
+      ],
+      "can_save": true
+    },
+    {
+      "id": "labdip-over-limit",
+      "description": "Approved above the ΔE limit, replacing a shade",
+      "given": [],
+      "doc_type": "labdip",
+      "values": {
+        "shade": "WS-4471",
+        "name": "Coral Red",
+        "customer": "Ashapura Plast",
+        "carrier": "PP homopolymer",
+        "recipe": "PR57:1 3.2%, TiO2 1.5%, PE wax 1.8%",
+        "ldr": "1:50 (2%)",
+        "de": "1.4",
+        "result": "Approved"
+      },
+      "expect": [
+        {
+          "level": "warning",
+          "id": "SHADE_REPLACES",
+          "params": {
+            "shade": "WS-4471"
+          }
+        },
+        {
+          "level": "warning",
+          "id": "APPROVED_ABOVE_LIMIT",
+          "params": {
+            "de": "1.4",
+            "limit": "1.0"
+          }
+        },
+        {
+          "level": "ok",
+          "id": "LABDIP_OK",
+          "params": {
+            "n": "3",
+            "let_down": "1:50 (2%)"
+          }
+        }
+      ],
+      "can_save": true
+    },
+    {
+      "id": "labdip-over-100",
+      "description": "Recipe leaves no room for carrier",
+      "given": [],
+      "doc_type": "labdip",
+      "values": {
+        "shade": "WS-6214",
+        "name": "Coral Red",
+        "customer": "Ashapura Plast",
+        "carrier": "PP homopolymer",
+        "recipe": "TiO2 70%, PE wax 31%",
+        "ldr": "1:50 (2%)",
+        "de": "0.74",
+        "result": "Approved"
+      },
+      "expect": [
+        {
+          "level": "error",
+          "id": "RECIPE_OVER_100",
+          "params": {}
+        }
+      ],
+      "can_save": false
+    },
+    {
+      "id": "batchlog-sample",
+      "description": "Sample batch log as read: misread lot",
+      "given": [],
+      "doc_type": "batchlog",
+      "values": {
+        "batch": "B-TS01-0925-A",
+        "line": "TS-01, Shift A",
+        "shade": "WS-4471",
+        "lots": "PB153-2480 18.2 kg; TIO2-R902-2408 12 kg; WAX-PE-2407 8 kg; LL-MB-2409 361.8 kg",
+        "output": "396 kg",
+        "purge": "4 kg",
+        "date": "25/09/2026"
+      },
+      "expect": [
+        {
+          "level": "error",
+          "id": "LOT_NOT_FOUND",
+          "params": {
+            "lot": "PB153-2480",
+            "suggestion": "PB153-2408"
+          }
+        },
+        {
+          "level": "ok",
+          "id": "BALANCE_CLOSES",
+          "params": {
+            "charged": "400",
+            "accounted": "400"
+          }
+        },
+        {
+          "level": "warning",
+          "id": "RECIPE_WAITING",
+          "params": {}
+        }
+      ],
+      "can_save": false
+    },
+    {
+      "id": "batchlog-fixed",
+      "description": "Sample batch log after applying the lot fix",
+      "given": [],
+      "doc_type": "batchlog",
+      "values": {
+        "batch": "B-TS01-0925-A",
+        "line": "TS-01, Shift A",
+        "shade": "WS-4471",
+        "lots": "PB153-2408 18.2 kg; TIO2-R902-2408 12 kg; WAX-PE-2407 8 kg; LL-MB-2409 361.8 kg",
+        "output": "396 kg",
+        "purge": "4 kg",
+        "date": "25/09/2026"
+      },
+      "expect": [
+        {
+          "level": "ok",
+          "id": "BALANCE_CLOSES",
+          "params": {
+            "charged": "400",
+            "accounted": "400"
+          }
+        },
+        {
+          "level": "ok",
+          "id": "RECIPE_MATCH",
+          "params": {
+            "shade": "WS-4471",
+            "tol": "5.0"
+          }
+        }
+      ],
+      "can_save": true
+    },
+    {
+      "id": "batchlog-gap",
+      "description": "Six kilograms unaccounted",
+      "given": [],
+      "doc_type": "batchlog",
+      "values": {
+        "batch": "B-TEST-GAP",
+        "line": "TS-01, Shift B",
+        "shade": "WS-0901",
+        "lots": "CB-N330-2409 200 kg; WAX-PE-2407 10 kg; LL-MB-2409 290 kg",
+        "output": "490 kg",
+        "purge": "4 kg",
+        "date": "27/09/2026"
+      },
+      "expect": [
+        {
+          "level": "warning",
+          "id": "BALANCE_OFF",
+          "params": {
+            "gap": "6",
+            "charged": "500",
+            "accounted": "494"
+          }
+        },
+        {
+          "level": "ok",
+          "id": "RECIPE_MATCH",
+          "params": {
+            "shade": "WS-0901",
+            "tol": "5.0"
+          }
+        }
+      ],
+      "can_save": true
+    },
+    {
+      "id": "batchlog-insufficient",
+      "description": "Charging more than the lot has left",
+      "given": [],
+      "doc_type": "batchlog",
+      "values": {
+        "batch": "B-TEST-SHORT",
+        "line": "TS-01, Shift A",
+        "shade": "WS-0901",
+        "lots": "CB-N330-2409 480 kg; WAX-PE-2407 24 kg; LL-MB-2409 696 kg",
+        "output": "1188 kg",
+        "purge": "12 kg",
+        "date": "27/09/2026"
+      },
+      "expect": [
+        {
+          "level": "error",
+          "id": "LOT_INSUFFICIENT",
+          "params": {
+            "lot": "CB-N330-2409",
+            "remaining": "280"
+          }
+        },
+        {
+          "level": "ok",
+          "id": "BALANCE_CLOSES",
+          "params": {
+            "charged": "1,200",
+            "accounted": "1,200"
+          }
+        },
+        {
+          "level": "ok",
+          "id": "RECIPE_MATCH",
+          "params": {
+            "shade": "WS-0901",
+            "tol": "5.0"
+          }
+        }
+      ],
+      "can_save": false
+    },
+    {
+      "id": "batchlog-purge",
+      "description": "Purge above the 3% norm",
+      "given": [],
+      "doc_type": "batchlog",
+      "values": {
+        "batch": "B-TEST-PURGE",
+        "line": "TS-01, Shift A",
+        "shade": "WS-0002",
+        "lots": "TIO2-R902-2408 70 kg; WAX-PE-2407 2.5 kg; PP-H-2408 27.5 kg",
+        "output": "95 kg",
+        "purge": "5 kg",
+        "date": "27/09/2026"
+      },
+      "expect": [
+        {
+          "level": "ok",
+          "id": "BALANCE_CLOSES",
+          "params": {
+            "charged": "100",
+            "accounted": "100"
+          }
+        },
+        {
+          "level": "warning",
+          "id": "PURGE_ABOVE_NORM",
+          "params": {
+            "pct": "5.0",
+            "norm": "3.0"
+          }
+        },
+        {
+          "level": "ok",
+          "id": "RECIPE_MATCH",
+          "params": {
+            "shade": "WS-0002",
+            "tol": "5.0"
+          }
+        }
+      ],
+      "can_save": true
+    },
+    {
+      "id": "batchlog-deviation",
+      "description": "Blue pigment overcharged",
+      "given": [],
+      "doc_type": "batchlog",
+      "values": {
+        "batch": "B-TEST-DEV",
+        "line": "TS-02, Shift A",
+        "shade": "WS-4471",
+        "lots": "PB153-2408 22 kg; TIO2-R902-2408 12 kg; WAX-PE-2407 8 kg; LL-MB-2409 358 kg",
+        "output": "396 kg",
+        "purge": "4 kg",
+        "date": "27/09/2026"
+      },
+      "expect": [
+        {
+          "level": "ok",
+          "id": "BALANCE_CLOSES",
+          "params": {
+            "charged": "400",
+            "accounted": "400"
+          }
+        },
+        {
+          "level": "warning",
+          "id": "RECIPE_DEVIATION",
+          "params": {
+            "component": "PB15:3",
+            "actual": "22",
+            "expected": "18.4",
+            "dev": "+19.6"
+          }
+        }
+      ],
+      "can_save": true
+    },
+    {
+      "id": "batchlog-extra",
+      "description": "Component not in the recipe",
+      "given": [],
+      "doc_type": "batchlog",
+      "values": {
+        "batch": "B-TEST-EXTRA",
+        "line": "TS-02, Shift A",
+        "shade": "WS-3108",
+        "lots": "PY83-2407 3.8 kg; TIO2-R902-2408 2 kg; WAX-PE-2407 1.5 kg; PB153-2408 1 kg; PP-H-2408 91.7 kg",
+        "output": "98 kg",
+        "purge": "2 kg",
+        "date": "27/09/2026"
+      },
+      "expect": [
+        {
+          "level": "ok",
+          "id": "BALANCE_CLOSES",
+          "params": {
+            "charged": "100",
+            "accounted": "100"
+          }
+        },
+        {
+          "level": "warning",
+          "id": "RECIPE_EXTRA",
+          "params": {
+            "component": "PB15:3",
+            "shade": "WS-3108"
+          }
+        }
+      ],
+      "can_save": true
+    },
+    {
+      "id": "batchlog-unknown-lot",
+      "description": "Lot with no close match",
+      "given": [],
+      "doc_type": "batchlog",
+      "values": {
+        "batch": "B-TEST-UNK",
+        "line": "TS-02, Shift A",
+        "shade": "WS-4471",
+        "lots": "XYZ-9999 10 kg",
+        "output": "10 kg",
+        "purge": "0 kg",
+        "date": "27/09/2026"
+      },
+      "expect": [
+        {
+          "level": "error",
+          "id": "LOT_NOT_FOUND",
+          "params": {
+            "lot": "XYZ-9999",
+            "suggestion": null
+          }
+        },
+        {
+          "level": "ok",
+          "id": "BALANCE_CLOSES",
+          "params": {
+            "charged": "10",
+            "accounted": "10"
+          }
+        },
+        {
+          "level": "warning",
+          "id": "RECIPE_WAITING",
+          "params": {}
+        }
+      ],
+      "can_save": false
+    },
+    {
+      "id": "batchlog-duplicate",
+      "description": "Batch already on record, unknown shade",
+      "given": [],
+      "doc_type": "batchlog",
+      "values": {
+        "batch": "B-TS02-0908-B",
+        "line": "TS-01, Shift A",
+        "shade": "WS-9999",
+        "lots": "PB153-2408 18.2 kg; TIO2-R902-2408 12 kg; WAX-PE-2407 8 kg; LL-MB-2409 361.8 kg",
+        "output": "396 kg",
+        "purge": "4 kg",
+        "date": "25/09/2026"
+      },
+      "expect": [
+        {
+          "level": "error",
+          "id": "BATCH_DUPLICATE",
+          "params": {
+            "batch": "B-TS02-0908-B"
+          }
+        },
+        {
+          "level": "error",
+          "id": "SHADE_NO_RECIPE",
+          "params": {
+            "shade": "WS-9999"
+          }
+        },
+        {
+          "level": "ok",
+          "id": "BALANCE_CLOSES",
+          "params": {
+            "charged": "400",
+            "accounted": "400"
+          }
+        }
+      ],
+      "can_save": false
+    },
+    {
+      "id": "qc-unknown-batch",
+      "description": "QC before its batch log",
+      "given": [],
+      "doc_type": "qc",
+      "values": {
+        "batch": "B-TS01-0925-A",
+        "de": "0.66",
+        "mfi": "21.4 g/10min",
+        "dispersion": "Pass, no specks",
+        "moisture": "0.08%",
+        "result": "Pass"
+      },
+      "expect": [
+        {
+          "level": "error",
+          "id": "BATCH_NOT_FOUND",
+          "params": {
+            "batch": "B-TS01-0925-A"
+          }
+        }
+      ],
+      "can_save": false
+    },
+    {
+      "id": "qc-sample",
+      "description": "Sample QC after the fixed batch log is saved",
+      "given": [
+        {
+          "doc_type": "batchlog",
+          "values": {
+            "batch": "B-TS01-0925-A",
+            "line": "TS-01, Shift A",
+            "shade": "WS-4471",
+            "lots": "PB153-2408 18.2 kg; TIO2-R902-2408 12 kg; WAX-PE-2407 8 kg; LL-MB-2409 361.8 kg",
+            "output": "396 kg",
+            "purge": "4 kg",
+            "date": "25/09/2026"
+          }
+        }
+      ],
+      "doc_type": "qc",
+      "values": {
+        "batch": "B-TS01-0925-A",
+        "de": "0.66",
+        "mfi": "21.4 g/10min",
+        "dispersion": "Pass, no specks",
+        "moisture": "0.08%",
+        "result": "Pass"
+      },
+      "expect": [
+        {
+          "level": "ok",
+          "id": "QC_OK",
+          "params": {
+            "de": "0.66",
+            "shade": "WS-4471",
+            "approved_de": "0.62"
+          }
+        }
+      ],
+      "can_save": true
+    },
+    {
+      "id": "qc-replace-high",
+      "description": "Replacing a QC reading with ΔE above limit marked pass",
+      "given": [],
+      "doc_type": "qc",
+      "values": {
+        "batch": "B-TS02-0918-B",
+        "de": "1.2",
+        "mfi": "22 g/10min",
+        "dispersion": "Pass",
+        "moisture": "0.08%",
+        "result": "Pass"
+      },
+      "expect": [
+        {
+          "level": "warning",
+          "id": "QC_REPLACES",
+          "params": {}
+        },
+        {
+          "level": "warning",
+          "id": "DE_ABOVE_LIMIT_PASS",
+          "params": {
+            "de": "1.2",
+            "limit": "1.0"
+          }
+        },
+        {
+          "level": "ok",
+          "id": "QC_OK",
+          "params": {
+            "de": "1.2",
+            "shade": "WS-4471",
+            "approved_de": "0.62"
+          }
+        }
+      ],
+      "can_save": true
+    },
+    {
+      "id": "dispatch-no-qc",
+      "description": "Dispatch before QC is captured",
+      "given": [
+        {
+          "doc_type": "batchlog",
+          "values": {
+            "batch": "B-TS01-0925-A",
+            "line": "TS-01, Shift A",
+            "shade": "WS-4471",
+            "lots": "PB153-2408 18.2 kg; TIO2-R902-2408 12 kg; WAX-PE-2407 8 kg; LL-MB-2409 361.8 kg",
+            "output": "396 kg",
+            "purge": "4 kg",
+            "date": "25/09/2026"
+          }
+        }
+      ],
+      "doc_type": "dispatch",
+      "values": {
+        "dn": "DN-2609-431",
+        "customer": "Sagar Polypack",
+        "shade": "WS-4471",
+        "batch": "B-TS01-0925-A",
+        "qty": "396 kg",
+        "date": "26/09/2026"
+      },
+      "expect": [
+        {
+          "level": "warning",
+          "id": "NO_QC",
+          "params": {}
+        },
+        {
+          "level": "ok",
+          "id": "DISPATCH_OK",
+          "params": {
+            "qty": "396",
+            "shade": "WS-4471",
+            "customer": "Sagar Polypack"
+          }
+        }
+      ],
+      "can_save": true
+    },
+    {
+      "id": "dispatch-sample",
+      "description": "Sample dispatch after batch log and QC",
+      "given": [
+        {
+          "doc_type": "batchlog",
+          "values": {
+            "batch": "B-TS01-0925-A",
+            "line": "TS-01, Shift A",
+            "shade": "WS-4471",
+            "lots": "PB153-2408 18.2 kg; TIO2-R902-2408 12 kg; WAX-PE-2407 8 kg; LL-MB-2409 361.8 kg",
+            "output": "396 kg",
+            "purge": "4 kg",
+            "date": "25/09/2026"
+          }
+        },
+        {
+          "doc_type": "qc",
+          "values": {
+            "batch": "B-TS01-0925-A",
+            "de": "0.66",
+            "mfi": "21.4 g/10min",
+            "dispersion": "Pass, no specks",
+            "moisture": "0.08%",
+            "result": "Pass"
+          }
+        }
+      ],
+      "doc_type": "dispatch",
+      "values": {
+        "dn": "DN-2609-431",
+        "customer": "Sagar Polypack",
+        "shade": "WS-4471",
+        "batch": "B-TS01-0925-A",
+        "qty": "396 kg",
+        "date": "26/09/2026"
+      },
+      "expect": [
+        {
+          "level": "ok",
+          "id": "DISPATCH_OK",
+          "params": {
+            "qty": "396",
+            "shade": "WS-4471",
+            "customer": "Sagar Polypack"
+          }
+        }
+      ],
+      "can_save": true
+    },
+    {
+      "id": "dispatch-over",
+      "description": "Dispatching a batch already fully shipped",
+      "given": [],
+      "doc_type": "dispatch",
+      "values": {
+        "dn": "DN-2609-499",
+        "customer": "Shivam Containers",
+        "shade": "WS-0002",
+        "batch": "B-TS01-0920-A",
+        "qty": "100 kg",
+        "date": "27/09/2026"
+      },
+      "expect": [
+        {
+          "level": "error",
+          "id": "OVER_DISPATCH",
+          "params": {
+            "available": "0",
+            "batch": "B-TS01-0920-A"
+          }
+        }
+      ],
+      "can_save": false
+    },
+    {
+      "id": "dispatch-shade-mismatch",
+      "description": "Slip shade differs from the batch",
+      "given": [],
+      "doc_type": "dispatch",
+      "values": {
+        "dn": "DN-2609-498",
+        "customer": "Vardhman Moulders",
+        "shade": "WS-4471",
+        "batch": "B-TS02-0915-A",
+        "qty": "10 kg",
+        "date": "27/09/2026"
+      },
+      "expect": [
+        {
+          "level": "error",
+          "id": "SHADE_MISMATCH",
+          "params": {
+            "batch": "B-TS02-0915-A",
+            "batch_shade": "WS-3108",
+            "shade": "WS-4471"
+          }
+        },
+        {
+          "level": "error",
+          "id": "OVER_DISPATCH",
+          "params": {
+            "available": "0",
+            "batch": "B-TS02-0915-A"
+          }
+        }
+      ],
+      "can_save": false
+    },
+    {
+      "id": "dispatch-customer",
+      "description": "Customer-specific shade going to someone else",
+      "given": [
+        {
+          "doc_type": "batchlog",
+          "values": {
+            "batch": "B-TS01-0925-A",
+            "line": "TS-01, Shift A",
+            "shade": "WS-4471",
+            "lots": "PB153-2408 18.2 kg; TIO2-R902-2408 12 kg; WAX-PE-2407 8 kg; LL-MB-2409 361.8 kg",
+            "output": "396 kg",
+            "purge": "4 kg",
+            "date": "25/09/2026"
+          }
+        },
+        {
+          "doc_type": "qc",
+          "values": {
+            "batch": "B-TS01-0925-A",
+            "de": "0.66",
+            "mfi": "21.4 g/10min",
+            "dispersion": "Pass, no specks",
+            "moisture": "0.08%",
+            "result": "Pass"
+          }
+        }
+      ],
+      "doc_type": "dispatch",
+      "values": {
+        "dn": "DN-2609-497",
+        "customer": "Krishna Pipes",
+        "shade": "WS-4471",
+        "batch": "B-TS01-0925-A",
+        "qty": "100 kg",
+        "date": "26/09/2026"
+      },
+      "expect": [
+        {
+          "level": "warning",
+          "id": "CUSTOMER_MISMATCH",
+          "params": {
+            "shade": "WS-4471",
+            "shade_customer": "Sagar Polypack"
+          }
+        },
+        {
+          "level": "ok",
+          "id": "DISPATCH_OK",
+          "params": {
+            "qty": "100",
+            "shade": "WS-4471",
+            "customer": "Krishna Pipes"
+          }
+        }
+      ],
+      "can_save": true
+    },
+    {
+      "id": "dispatch-duplicate",
+      "description": "Dispatch note already on record",
+      "given": [],
+      "doc_type": "dispatch",
+      "values": {
+        "dn": "DN-2609-407",
+        "customer": "Krishna Pipes",
+        "shade": "WS-0901",
+        "batch": "B-TS01-0910-A",
+        "qty": "1 kg",
+        "date": "27/09/2026"
+      },
+      "expect": [
+        {
+          "level": "error",
+          "id": "DN_DUPLICATE",
+          "params": {
+            "dn": "DN-2609-407"
+          }
+        },
+        {
+          "level": "error",
+          "id": "OVER_DISPATCH",
+          "params": {
+            "available": "0",
+            "batch": "B-TS01-0910-A"
+          }
+        }
+      ],
+      "can_save": false
+    }
+  ]
+}

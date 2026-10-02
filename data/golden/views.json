@@ -1,0 +1,102 @@
+{
+  "about": "Golden expectations for read views. Each case starts from data/fixtures and applies the given captures in order. Numbers are display strings from domain/format.py.",
+  "cases": [
+    {
+      "id": "material-fixtures",
+      "view": "material",
+      "given": [],
+      "expect": {
+        "lot_count": 7,
+        "received_kg": "10,850",
+        "charged_kg": "3,306",
+        "output_kg": "3,258",
+        "purge_kg": "42",
+        "purge_pct": "1.3",
+        "gap_kg": "6",
+        "gap_batches": [{"batch_id": "B-TS01-0910-A", "gap_kg": "6"}],
+        "lot_rows": {
+          "CB-N330-2409": {"used_kg": "720", "remaining_kg": "280", "batch_count": 2},
+          "LL-MB-2409": {"used_kg": "1,682.8", "remaining_kg": "3,317.2", "batch_count": 4},
+          "PB153-2408": {"used_kg": "32.2", "remaining_kg": "217.8", "batch_count": 2}
+        }
+      }
+    },
+    {
+      "id": "trace-complaint",
+      "view": "trace",
+      "given": [],
+      "dispatch_note": "DN-2609-407",
+      "expect": {
+        "batch_id": "B-TS01-0910-A",
+        "default_suspect": "CB-N330-2409",
+        "batch_count": 2,
+        "customer_count": 2,
+        "customers": ["Krishna Pipes", "Vardhman Moulders"],
+        "shipped_kg": "1,782",
+        "rows": [
+          {"batch_id": "B-TS01-0910-A", "dispatch_note": "DN-2609-407", "customer": "Krishna Pipes", "kg": "1,188"},
+          {"batch_id": "B-TS01-0912-B", "dispatch_note": "DN-2609-411", "customer": "Vardhman Moulders", "kg": "594"}
+        ],
+        "sibling_flags": [{"batch_id": "B-TS01-0912-B", "dispersion": "Minor specks"}]
+      }
+    },
+    {
+      "id": "trace-shared-carrier",
+      "view": "trace",
+      "given": [],
+      "dispatch_note": "DN-2609-407",
+      "lot": "LL-MB-2409",
+      "expect": {
+        "batch_count": 4,
+        "customer_count": 3,
+        "shipped_kg": "2,468"
+      }
+    },
+    {
+      "id": "trace-new-dispatch",
+      "view": "trace",
+      "given": ["batchlog-fixed", "qc-sample", "dispatch-sample"],
+      "dispatch_note": "DN-2609-431",
+      "expect": {
+        "batch_id": "B-TS01-0925-A",
+        "default_suspect": "PB153-2408",
+        "charges": ["PB153-2408", "TIO2-R902-2408", "WAX-PE-2407", "LL-MB-2409"]
+      }
+    },
+    {
+      "id": "certificate-issuable",
+      "view": "certificate",
+      "given": [],
+      "batch_id": "B-TS02-0918-B",
+      "expect": {
+        "issuable": true,
+        "lines": {"delta_e": "0.71", "mfi": "22.1 g/10min", "dispersion": "Pass", "moisture": "0.08%", "result": "Pass", "customer": "Sagar Polypack", "lots": "PB153-2408, TIO2-R902-2408, WAX-PE-2407, LL-MB-2409"}
+      }
+    },
+    {
+      "id": "certificate-no-qc",
+      "view": "certificate",
+      "given": ["batchlog-fixed"],
+      "batch_id": "B-TS01-0925-A",
+      "expect": {
+        "issuable": false,
+        "blocking_reason": "no_qc_reading",
+        "null_lines": ["delta_e", "mfi", "dispersion", "moisture", "result"],
+        "customer_state": "not_dispatched"
+      }
+    },
+    {
+      "id": "certificate-after-capture",
+      "view": "certificate",
+      "given": ["batchlog-fixed", "qc-sample", "dispatch-sample"],
+      "batch_id": "B-TS01-0925-A",
+      "expect": {
+        "issuable": true,
+        "lines": {"delta_e": "0.66", "customer": "Sagar Polypack"},
+        "delta_e_source_doc_type": "qc",
+        "delta_e_source_mode": "prepared"
+      }
+    }
+  ],
+  "given_refs": "Names in given refer to case ids in data/golden/checks.json. Apply that case's given captures first, then commit its values as a prepared reading."
+}

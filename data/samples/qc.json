@@ -1,0 +1,123 @@
+{
+  "doc_type": "qc",
+  "title_en": "QC register",
+  "fields": [
+    {
+      "key": "batch",
+      "label_en": "Batch no.",
+      "hint": null
+    },
+    {
+      "key": "de",
+      "label_en": "ΔE vs standard",
+      "hint": null
+    },
+    {
+      "key": "mfi",
+      "label_en": "MFI",
+      "hint": null
+    },
+    {
+      "key": "dispersion",
+      "label_en": "Dispersion",
+      "hint": null
+    },
+    {
+      "key": "moisture",
+      "label_en": "Moisture",
+      "hint": null
+    },
+    {
+      "key": "result",
+      "label_en": "Result",
+      "hint": "Pass or Fail"
+    }
+  ],
+  "prepared_reading": [
+    {
+      "key": "batch",
+      "value": "B-TS01-0925-A",
+      "confidence": "high"
+    },
+    {
+      "key": "de",
+      "value": "0.66",
+      "confidence": "high"
+    },
+    {
+      "key": "mfi",
+      "value": "21.4 g/10min",
+      "confidence": "high"
+    },
+    {
+      "key": "dispersion",
+      "value": "Pass, no specks",
+      "confidence": "high"
+    },
+    {
+      "key": "moisture",
+      "value": "0.08%",
+      "confidence": "low"
+    },
+    {
+      "key": "result",
+      "value": "Pass",
+      "confidence": "high"
+    }
+  ],
+  "paper": {
+    "title": "QC REGISTER",
+    "form": "Quality  ·  Form F-04",
+    "rows": [
+      {
+        "label": "Date",
+        "value": "25/09/2026",
+        "mark": null
+      },
+      {
+        "label": "Batch no.",
+        "value": "B-TS01-0925-A",
+        "mark": null
+      },
+      {
+        "label": "Shade",
+        "value": "WS-4471",
+        "mark": null
+      },
+      {
+        "label": "ΔE vs std",
+        "value": "0.66",
+        "mark": null
+      },
+      {
+        "label": "MFI",
+        "value": "21.4 g/10min",
+        "mark": null
+      },
+      {
+        "label": "Dispersion",
+        "value": "Pass, no specks",
+        "mark": null
+      },
+      {
+        "label": "Moisture",
+        "value": "0.08 %",
+        "mark": {
+          "smudge": true
+        }
+      },
+      {
+        "label": "Result",
+        "value": "PASS",
+        "mark": null
+      },
+      {
+        "label": "Checked by",
+        "value": "",
+        "mark": {
+          "sign": true
+        }
+      }
+    ]
+  }
+}

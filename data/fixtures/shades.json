@@ -1,0 +1,110 @@
+[
+  {
+    "shade_code": "WS-4471",
+    "name": "Ocean Blue",
+    "customer": "Sagar Polypack",
+    "catalogue": false,
+    "carrier": "LLDPE",
+    "recipe": [
+      {
+        "component": "PB15:3",
+        "pct": 4.6
+      },
+      {
+        "component": "TiO2",
+        "pct": 3
+      },
+      {
+        "component": "PE wax",
+        "pct": 2
+      }
+    ],
+    "let_down": "1:40 (2.5%)",
+    "delta_e": 0.62,
+    "result": "Approved",
+    "approved_on": "14/03/2024",
+    "source": {
+      "doc_type": "labdip",
+      "mode": "seed"
+    }
+  },
+  {
+    "shade_code": "WS-0901",
+    "name": "Jet Black 40",
+    "customer": null,
+    "catalogue": true,
+    "carrier": "LLDPE",
+    "recipe": [
+      {
+        "component": "CB N330",
+        "pct": 40
+      },
+      {
+        "component": "PE wax",
+        "pct": 2
+      }
+    ],
+    "let_down": "1:40 (2.5%)",
+    "delta_e": 0.3,
+    "result": "Approved",
+    "approved_on": "05/01/2023",
+    "source": {
+      "doc_type": "labdip",
+      "mode": "seed"
+    }
+  },
+  {
+    "shade_code": "WS-3108",
+    "name": "Signal Yellow",
+    "customer": "Vardhman Moulders",
+    "catalogue": false,
+    "carrier": "PP homopolymer",
+    "recipe": [
+      {
+        "component": "PY83",
+        "pct": 3.8
+      },
+      {
+        "component": "TiO2",
+        "pct": 2
+      },
+      {
+        "component": "PE wax",
+        "pct": 1.5
+      }
+    ],
+    "let_down": "1:50 (2%)",
+    "delta_e": 0.55,
+    "result": "Approved",
+    "approved_on": "18/06/2025",
+    "source": {
+      "doc_type": "labdip",
+      "mode": "seed"
+    }
+  },
+  {
+    "shade_code": "WS-0002",
+    "name": "Super White 70",
+    "customer": null,
+    "catalogue": true,
+    "carrier": "PP homopolymer",
+    "recipe": [
+      {
+        "component": "TiO2",
+        "pct": 70
+      },
+      {
+        "component": "PE wax",
+        "pct": 2.5
+      }
+    ],
+    "let_down": "1:33 (3%)",
+    "delta_e": 0.4,
+    "result": "Approved",
+    "approved_on": "11/11/2022",
+    "source": {
+      "doc_type": "labdip",
+      "mode": "seed"
+    }
+  }
+]

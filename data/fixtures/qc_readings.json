@@ -1,0 +1,80 @@
+[
+  {
+    "batch_id": "B-TS02-0908-B",
+    "delta_e": 0.58,
+    "mfi": "21.8 g/10min",
+    "dispersion": "Pass",
+    "moisture": "0.07%",
+    "result": "Pass",
+    "tested_on": "08/09/2026",
+    "source": {
+      "doc_type": "qc",
+      "mode": "seed"
+    }
+  },
+  {
+    "batch_id": "B-TS01-0910-A",
+    "delta_e": 0.28,
+    "mfi": "18.9 g/10min",
+    "dispersion": "Pass",
+    "moisture": "0.06%",
+    "result": "Pass",
+    "tested_on": "10/09/2026",
+    "source": {
+      "doc_type": "qc",
+      "mode": "seed"
+    }
+  },
+  {
+    "batch_id": "B-TS01-0912-B",
+    "delta_e": 0.33,
+    "mfi": "19.2 g/10min",
+    "dispersion": "Minor specks",
+    "moisture": "0.09%",
+    "result": "Pass",
+    "tested_on": "12/09/2026",
+    "source": {
+      "doc_type": "qc",
+      "mode": "seed"
+    }
+  },
+  {
+    "batch_id": "B-TS02-0915-A",
+    "delta_e": 0.61,
+    "mfi": "12.6 g/10min",
+    "dispersion": "Pass",
+    "moisture": "0.05%",
+    "result": "Pass",
+    "tested_on": "15/09/2026",
+    "source": {
+      "doc_type": "qc",
+      "mode": "seed"
+    }
+  },
+  {
+    "batch_id": "B-TS02-0918-B",
+    "delta_e": 0.71,
+    "mfi": "22.1 g/10min",
+    "dispersion": "Pass",
+    "moisture": "0.08%",
+    "result": "Pass",
+    "tested_on": "18/09/2026",
+    "source": {
+      "doc_type": "qc",
+      "mode": "seed"
+    }
+  },
+  {
+    "batch_id": "B-TS01-0920-A",
+    "delta_e": 0.38,
+    "mfi": "11.8 g/10min",
+    "dispersion": "Pass",
+    "moisture": "0.04%",
+    "result": "Pass",
+    "tested_on": "20/09/2026",
+    "source": {
+      "doc_type": "qc",
+      "mode": "seed"
+    }
+  }
+]

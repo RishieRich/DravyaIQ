@@ -1,0 +1,118 @@
+{
+  "doc_type": "inward",
+  "title_en": "Inward register",
+  "fields": [
+    {
+      "key": "supplier",
+      "label_en": "Supplier",
+      "hint": "supplier or party name"
+    },
+    {
+      "key": "material",
+      "label_en": "Material",
+      "hint": "material name and grade"
+    },
+    {
+      "key": "lot",
+      "label_en": "Supplier lot no.",
+      "hint": "the supplier's lot number, exactly as written"
+    },
+    {
+      "key": "qty",
+      "label_en": "Net weight",
+      "hint": "net weight received, with unit"
+    },
+    {
+      "key": "date",
+      "label_en": "Date received",
+      "hint": "date as written"
+    },
+    {
+      "key": "coa",
+      "label_en": "Value on CoA",
+      "hint": "the test value noted for the certificate of analysis"
+    }
+  ],
+  "prepared_reading": [
+    {
+      "key": "supplier",
+      "value": "Navkar Colourchem",
+      "confidence": "high"
+    },
+    {
+      "key": "material",
+      "value": "Pigment Red 57:1",
+      "confidence": "high"
+    },
+    {
+      "key": "lot",
+      "value": "PR571-2409",
+      "confidence": "high"
+    },
+    {
+      "key": "qty",
+      "value": "150 kg",
+      "confidence": "high"
+    },
+    {
+      "key": "date",
+      "value": "24/09/2026",
+      "confidence": "low"
+    },
+    {
+      "key": "coa",
+      "value": "Strength 101.8%",
+      "confidence": "high"
+    }
+  ],
+  "paper": {
+    "title": "INWARD REGISTER",
+    "form": "Stores  ·  Form F-02  ·  Page 118",
+    "rows": [
+      {
+        "label": "Date",
+        "value": "24/09/2026",
+        "mark": {
+          "smudge": true
+        }
+      },
+      {
+        "label": "Party / supplier",
+        "value": "Navkar Colourchem",
+        "mark": null
+      },
+      {
+        "label": "Challan no.",
+        "value": "NC/1182",
+        "mark": null
+      },
+      {
+        "label": "Material",
+        "value": "Pigment Red 57:1",
+        "mark": null
+      },
+      {
+        "label": "Supplier lot no.",
+        "value": "PR571-2409",
+        "mark": null
+      },
+      {
+        "label": "Qty received",
+        "value": "150 kg   (6 bags x 25)",
+        "mark": null
+      },
+      {
+        "label": "CoA",
+        "value": "Recd.  Strength 101.8%",
+        "mark": null
+      },
+      {
+        "label": "Received by",
+        "value": "",
+        "mark": {
+          "sign": true
+        }
+      }
+    ]
+  }
+}

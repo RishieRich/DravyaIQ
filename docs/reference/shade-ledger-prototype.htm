@@ -1,0 +1,899 @@
+<title>Shade Ledger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600&family=Source+Sans+3:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+Devanagari:wght@400;600&family=Kalam&display=swap">
+<style>
+:root{
+  --paper:#FBF9F6;--panel:#FFFFFF;--sunk:#F3F0EA;--line:#E2DCD1;--line2:#CFC7B8;
+  --ink:#1B1E26;--ink2:#55596B;--ink3:#80859A;
+  --accent:#C9571A;--accent-ink:#FFFFFF;--accent-soft:#FBEDE4;
+  --crit:#A7332A;--crit-soft:#FAEAE7;--crit-line:#E3ABA3;
+  --warn:#8A5606;--warn-soft:#FBF1DC;--warn-line:#E6C88C;
+  --ok:#137F5C;--ok-soft:#E6F2EC;--ok-line:#A9D6C2;
+  --c1:#137F5C;
+  --font-d:'Archivo',system-ui,sans-serif;
+  --font-b:'Source Sans 3','Noto Sans Devanagari',system-ui,sans-serif;
+  --font-m:'IBM Plex Mono',ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --paper:#12161F;--panel:#191E2A;--sunk:#10141C;--line:#2B3140;--line2:#3C4356;
+  --ink:#EEEAE2;--ink2:#A9AFC0;--ink3:#7A8094;
+  --accent:#F08544;--accent-ink:#1A1206;--accent-soft:#2A1D14;
+  --crit:#EC8A82;--crit-soft:#2B1714;--crit-line:#5E2F29;
+  --warn:#E3B45E;--warn-soft:#2A2213;--warn-line:#5C4722;
+  --ok:#3DB287;--ok-soft:#10241C;--ok-line:#1F4A39;
+  --c1:#2E9E74;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#12161F;--panel:#191E2A;--sunk:#10141C;--line:#2B3140;--line2:#3C4356;
+  --ink:#EEEAE2;--ink2:#A9AFC0;--ink3:#7A8094;
+  --accent:#F08544;--accent-ink:#1A1206;--accent-soft:#2A1D14;
+  --crit:#EC8A82;--crit-soft:#2B1714;--crit-line:#5E2F29;
+  --warn:#E3B45E;--warn-soft:#2A2213;--warn-line:#5C4722;
+  --ok:#3DB287;--ok-soft:#10241C;--ok-line:#1F4A39;
+  --c1:#2E9E74;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-b);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--font-d);font-weight:600;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h1{font-size:19px}h2{font-size:17px}h3{font-size:14.5px}
+button{font:inherit;color:inherit}
+.mono{font-family:var(--font-m);font-variant-numeric:tabular-nums}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:var(--ink2)}.dim{color:var(--ink3)}
+.eyebrow{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);font-weight:600}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* app bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);border-bottom:1px solid var(--line)}
+.bar-in{max-width:1180px;margin:0 auto;padding:10px 16px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px}
+.brand small{display:block;font-size:12px;color:var(--ink3);font-weight:400;letter-spacing:0;font-family:var(--font-b)}
+.who{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--ink2)}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;letter-spacing:.03em;padding:3px 9px;border-radius:999px;border:1px solid var(--warn-line);background:var(--warn-soft);color:var(--warn)}
+.tabs{max-width:1180px;margin:0 auto;padding:0 16px;display:flex;gap:2px;overflow-x:auto;scrollbar-width:thin}
+.tab{background:none;border:0;border-bottom:2px solid transparent;padding:9px 13px;font-family:var(--font-d);font-weight:500;font-size:14px;color:var(--ink3);cursor:pointer;white-space:nowrap}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:8px;border:1px solid var(--line2);background:var(--panel);color:var(--ink);padding:8px 14px;font-size:14px;font-weight:500;cursor:pointer;transition:background .12s,border-color .12s}
+.btn:hover{border-color:var(--ink3)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn-p{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.btn-p:hover{filter:brightness(1.06);border-color:var(--accent)}
+.btn-s{padding:5px 10px;font-size:13px}
+.lnk{background:none;border:0;padding:0;color:var(--accent);cursor:pointer;text-decoration:underline;text-underline-offset:2px;font-size:13.5px}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
+.seg button{background:var(--panel);border:0;padding:5px 11px;font-size:13px;cursor:pointer;color:var(--ink2)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper);font-weight:600}
+
+/* layout */
+.wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:20px 48px}
+.head{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-end;justify-content:space-between;margin-bottom:16px}
+.head p{margin:4px 0 0;color:var(--ink2);max-width:68ch;font-size:14.5px}
+.split{display:grid;gap:16px;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.split.l{grid-template-columns:minmax(0,340px) minmax(0,1fr)}
+@media (max-width:860px){.split,.split.l{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;min-width:0}
+.card-h{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--line)}
+.card-b{padding:16px}
+.card-f{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:12px 16px;border-top:1px solid var(--line);background:var(--sunk)}
+.stack{display:flex;flex-direction:column;gap:12px}
+.tag{display:inline-block;font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:4px;background:var(--sunk);color:var(--ink2);border:1px solid var(--line);white-space:nowrap}
+.tag.ok{background:var(--ok-soft);color:var(--ok);border-color:var(--ok-line)}
+.tag.warn{background:var(--warn-soft);color:var(--warn);border-color:var(--warn-line)}
+.tag.crit{background:var(--crit-soft);color:var(--crit);border-color:var(--crit-line)}
+.tag.acc{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:16px}
+@media (max-width:860px){.steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.step{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;min-width:0}
+.step:hover{border-color:var(--line2)}
+.step[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.step .n{font-family:var(--font-m);font-size:12px;width:22px;height:22px;flex:none;border-radius:50%;display:grid;place-items:center;background:var(--sunk);color:var(--ink2)}
+.step[aria-pressed="true"] .n{background:var(--accent);color:var(--accent-ink)}
+.step b{display:block;font-size:13.5px;font-weight:600;line-height:1.3}
+.step small{display:block;font-size:12px;color:var(--ink3)}
+
+/* document */
+.docframe{background:var(--sunk);padding:14px;display:flex;justify-content:center}
+.docframe canvas,.docframe img{width:100%;max-width:520px;height:auto;display:block;border-radius:3px;box-shadow:0 1px 2px rgba(0,0,0,.12),0 6px 18px rgba(0,0,0,.08)}
+
+/* review */
+.points{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.points li{display:flex;gap:10px;font-size:14.5px}
+.points .k{font-family:var(--font-m);font-size:12px;color:var(--accent);flex:none;padding-top:2px}
+.status{font-size:13px;color:var(--ink2);border-left:3px solid var(--line2);border-radius:0;padding:2px 0 2px 10px}
+.status.on{border-left-color:var(--ok)}
+.errbox{font-size:13.5px;background:var(--crit-soft);border:1px solid var(--crit-line);color:var(--ink);border-radius:8px;padding:9px 12px}
+.spin{width:16px;height:16px;border-radius:50%;border:2px solid var(--line2);border-top-color:var(--accent);animation:sp .8s linear infinite;flex:none}
+@keyframes sp{to{transform:rotate(360deg)}}
+.frow{display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr);gap:6px 12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.frow:last-child{border-bottom:0}
+.frow label{font-size:13px;color:var(--ink2)}
+.frow input,.frow textarea{width:100%;min-width:0;font-family:var(--font-m);font-size:13px;line-height:1.5;padding:7px 9px;border-radius:7px;border:1px solid var(--line2);background:var(--panel);color:var(--ink);resize:vertical}
+.frow.low input,.frow.low textarea{border-color:var(--warn-line);background:var(--warn-soft)}
+.frow .act{grid-column:2;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+@media (max-width:520px){.frow{grid-template-columns:minmax(0,1fr)}.frow .act{grid-column:1}}
+.chk{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--sunk)}
+.chk .ic{font-family:var(--font-m);font-weight:600;flex:none;width:18px;text-align:center}
+.chk.ok{background:var(--ok-soft);border-color:var(--ok-line)}.chk.ok .ic{color:var(--ok)}
+.chk.warn{background:var(--warn-soft);border-color:var(--warn-line)}.chk.warn .ic{color:var(--warn)}
+.chk.err{background:var(--crit-soft);border-color:var(--crit-line)}.chk.err .ic{color:var(--crit)}
+.chk .body{flex:1;min-width:0}
+.chk .fix{margin-top:6px}
+.savedbox{background:var(--ok-soft);border:1px solid var(--ok-line);border-radius:10px;padding:14px 16px}
+.counts{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:13.5px;color:var(--ink2);margin-top:16px}
+.counts b{font-family:var(--font-d);font-size:17px;color:var(--ink);margin-right:5px}
+
+/* lists & tables */
+.search{width:100%;font:inherit;font-size:14px;padding:8px 11px;border-radius:8px;border:1px solid var(--line2);background:var(--panel);color:var(--ink)}
+.rows{display:flex;flex-direction:column}
+.row{display:flex;justify-content:space-between;gap:10px;align-items:center;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:10px 16px;cursor:pointer}
+.row:hover{background:var(--sunk)}
+.row[aria-pressed="true"]{background:var(--sunk);box-shadow:inset 3px 0 0 var(--accent)}
+.row .t1{font-weight:600;font-size:14px}
+.row .t2{font-size:12.5px;color:var(--ink3)}
+.tw{overflow-x:auto}
+table.t{width:100%;border-collapse:collapse;font-size:13.5px}
+table.t th{text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);font-weight:600;padding:7px 10px;border-bottom:1px solid var(--line2);white-space:nowrap}
+table.t td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t .r{text-align:right;font-variant-numeric:tabular-nums}
+table.t tr.click{cursor:pointer}
+table.t tr.click:hover td{background:var(--sunk)}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.kv div{background:var(--sunk);border:1px solid var(--line);border-radius:8px;padding:9px 11px}
+.kv .v{font-family:var(--font-m);font-size:14px;margin-top:2px}
+.lead{font-size:15px;padding:11px 13px;border-radius:8px;background:var(--accent-soft);color:var(--ink)}
+.meter{height:8px;border-radius:4px;background:var(--sunk);border:1px solid var(--line);overflow:hidden;min-width:70px}
+.meter i{display:block;height:100%;background:var(--c1);border-radius:0 3px 3px 0}
+
+/* trace */
+.gen{display:flex;flex-direction:column;gap:0}
+.node{position:relative;padding:10px 0 12px 22px;border-left:2px solid var(--line2);margin-left:7px}
+.node:last-child{border-left-color:transparent}
+.node::before{content:"";position:absolute;left:-7px;top:12px;width:12px;height:12px;border-radius:50%;background:var(--panel);border:2px solid var(--line2)}
+.node.hot::before{border-color:var(--crit);background:var(--crit)}
+.node .lbl{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);font-weight:600}
+.lotbtns{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.lotbtn{display:flex;justify-content:space-between;gap:10px;text-align:left;border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:8px 11px;cursor:pointer;font-size:13.5px}
+.lotbtn:hover{border-color:var(--line2)}
+.lotbtn[aria-pressed="true"]{border-color:var(--crit);background:var(--crit-soft)}
+.radius{border:1px solid var(--crit-line);background:var(--crit-soft);border-radius:10px;padding:14px 16px}
+.big{font-family:var(--font-d);font-size:26px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
+
+/* certificate */
+.cert{position:relative;overflow:hidden;background:var(--panel);border:1px solid var(--line2);border-radius:8px;padding:22px 22px 18px}
+.cert .wm{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
+.cert .wm span{transform:rotate(-22deg);font-family:var(--font-d);font-weight:600;font-size:54px;letter-spacing:.12em;color:var(--ink);opacity:.06;white-space:nowrap}
+.cert-h{text-align:center;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:12px}
+.cert-h .co{font-family:var(--font-d);font-size:17px;font-weight:600}
+.cert-h .ti{font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink2);margin-top:4px}
+.crow{display:flex;justify-content:space-between;gap:14px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13.5px;align-items:baseline}
+.crow .k{color:var(--ink2)}
+.prov{background:none;border:0;padding:0 0 1px;font-family:var(--font-m);font-size:13px;color:var(--ink);border-bottom:1px dotted var(--accent);cursor:pointer;text-align:right}
+.prov:hover,.prov[aria-expanded="true"]{color:var(--accent)}
+.provbox{margin-top:12px;background:var(--sunk);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:0;padding:10px 12px;font-size:13px}
+.blockd{background:var(--warn-soft);border:1px solid var(--warn-line);border-radius:8px;padding:11px 13px;font-size:13.5px;margin-bottom:12px}
+
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:9px;font-size:14px;z-index:20;box-shadow:0 6px 22px rgba(0,0,0,.2);max-width:calc(100% - 32px)}
+.foot{max-width:1180px;margin:0 auto;padding:0 16px 32px;font-size:12px;color:var(--ink3)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div id="root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.26.4/babel.min.js"></script>
+
+<script type="text/babel" data-presets="react">
+const {useState,useEffect,useRef} = React;
+const clone = x => JSON.parse(JSON.stringify(x));
+const msg = (lang,en,hi) => lang==='hi' ? hi : en;
+
+/* ================= sample record (demo data) ================= */
+const S = t => ({type:t,mode:'seed'});
+const SEED = {
+  lots:{
+    "PB153-2408":{id:"PB153-2408",material:"Pigment Blue 15:3",comp:"PB15:3",supplier:"Navkar Colourchem",qty:250,date:"22/08/2026",coa:"Strength 102.4%",src:S('inward')},
+    "PY83-2407":{id:"PY83-2407",material:"Pigment Yellow 83",comp:"PY83",supplier:"Navkar Colourchem",qty:200,date:"30/07/2026",coa:"Strength 99.6%",src:S('inward')},
+    "CB-N330-2409":{id:"CB-N330-2409",material:"Carbon black N330",comp:"CB N330",supplier:"Kutch Carbon",qty:1000,date:"02/09/2026",coa:"Iodine no. 82 mg/g",src:S('inward')},
+    "TIO2-R902-2408":{id:"TIO2-R902-2408",material:"Titanium dioxide, rutile",comp:"TiO2",supplier:"Meridian Minerals",qty:1000,date:"28/08/2026",coa:"Purity 98.2%",src:S('inward')},
+    "LL-MB-2409":{id:"LL-MB-2409",material:"LLDPE carrier, MB grade",comp:"carrier",supplier:"Sahyadri Polymers",qty:5000,date:"01/09/2026",coa:"MFI 20 g/10min",src:S('inward')},
+    "PP-H-2408":{id:"PP-H-2408",material:"PP homopolymer carrier",comp:"carrier",supplier:"Sahyadri Polymers",qty:3000,date:"20/08/2026",coa:"MFI 12 g/10min",src:S('inward')},
+    "WAX-PE-2407":{id:"WAX-PE-2407",material:"PE wax dispersant",comp:"PE wax",supplier:"Deccan Additives",qty:400,date:"25/07/2026",coa:"Drop point 105°C",src:S('inward')}
+  },
+  shades:{
+    "WS-4471":{code:"WS-4471",name:"Ocean Blue",customer:"Sagar Polypack",catalogue:false,carrier:"LLDPE",recipe:[{comp:"PB15:3",pct:4.6},{comp:"TiO2",pct:3.0},{comp:"PE wax",pct:2.0}],ldr:"1:40 (2.5%)",de:0.62,result:"Approved",date:"14/03/2024",src:S('labdip')},
+    "WS-0901":{code:"WS-0901",name:"Jet Black 40",customer:"",catalogue:true,carrier:"LLDPE",recipe:[{comp:"CB N330",pct:40},{comp:"PE wax",pct:2.0}],ldr:"1:40 (2.5%)",de:0.30,result:"Approved",date:"05/01/2023",src:S('labdip')},
+    "WS-3108":{code:"WS-3108",name:"Signal Yellow",customer:"Vardhman Moulders",catalogue:false,carrier:"PP homopolymer",recipe:[{comp:"PY83",pct:3.8},{comp:"TiO2",pct:2.0},{comp:"PE wax",pct:1.5}],ldr:"1:50 (2%)",de:0.55,result:"Approved",date:"18/06/2025",src:S('labdip')},
+    "WS-0002":{code:"WS-0002",name:"Super White 70",customer:"",catalogue:true,carrier:"PP homopolymer",recipe:[{comp:"TiO2",pct:70},{comp:"PE wax",pct:2.5}],ldr:"1:33 (3%)",de:0.40,result:"Approved",date:"11/11/2022",src:S('labdip')}
+  },
+  batches:{
+    "B-TS02-0908-B":{id:"B-TS02-0908-B",line:"TS-02, Shift B",shade:"WS-4471",date:"08/09/2026",lots:[{lot:"PB153-2408",kg:18.4},{lot:"TIO2-R902-2408",kg:12},{lot:"WAX-PE-2407",kg:8},{lot:"LL-MB-2409",kg:361.6}],output:392,purge:8,src:S('batchlog'),
+      qc:{de:0.58,mfi:"21.8 g/10min",dispersion:"Pass",moisture:"0.07%",result:"Pass",date:"08/09/2026",src:S('qc')}},
+    "B-TS01-0910-A":{id:"B-TS01-0910-A",line:"TS-01, Shift A",shade:"WS-0901",date:"10/09/2026",lots:[{lot:"CB-N330-2409",kg:480},{lot:"WAX-PE-2407",kg:24},{lot:"LL-MB-2409",kg:702}],output:1188,purge:12,src:S('batchlog'),
+      qc:{de:0.28,mfi:"18.9 g/10min",dispersion:"Pass",moisture:"0.06%",result:"Pass",date:"10/09/2026",src:S('qc')}},
+    "B-TS01-0912-B":{id:"B-TS01-0912-B",line:"TS-01, Shift B",shade:"WS-0901",date:"12/09/2026",lots:[{lot:"CB-N330-2409",kg:240},{lot:"WAX-PE-2407",kg:12},{lot:"LL-MB-2409",kg:348}],output:594,purge:6,src:S('batchlog'),
+      qc:{de:0.33,mfi:"19.2 g/10min",dispersion:"Minor specks",moisture:"0.09%",result:"Pass",date:"12/09/2026",src:S('qc')}},
+    "B-TS02-0915-A":{id:"B-TS02-0915-A",line:"TS-02, Shift A",shade:"WS-3108",date:"15/09/2026",lots:[{lot:"PY83-2407",kg:11.4},{lot:"TIO2-R902-2408",kg:6},{lot:"WAX-PE-2407",kg:4.5},{lot:"PP-H-2408",kg:278.1}],output:296,purge:4,src:S('batchlog'),
+      qc:{de:0.61,mfi:"12.6 g/10min",dispersion:"Pass",moisture:"0.05%",result:"Pass",date:"15/09/2026",src:S('qc')}},
+    "B-TS02-0918-B":{id:"B-TS02-0918-B",line:"TS-02, Shift B",shade:"WS-4471",date:"18/09/2026",lots:[{lot:"PB153-2408",kg:13.8},{lot:"TIO2-R902-2408",kg:9},{lot:"WAX-PE-2407",kg:6},{lot:"LL-MB-2409",kg:271.2}],output:294,purge:6,src:S('batchlog'),
+      qc:{de:0.71,mfi:"22.1 g/10min",dispersion:"Pass",moisture:"0.08%",result:"Pass",date:"18/09/2026",src:S('qc')}},
+    "B-TS01-0920-A":{id:"B-TS01-0920-A",line:"TS-01, Shift A",shade:"WS-0002",date:"20/09/2026",lots:[{lot:"TIO2-R902-2408",kg:350},{lot:"WAX-PE-2407",kg:12.5},{lot:"PP-H-2408",kg:137.5}],output:494,purge:6,src:S('batchlog'),
+      qc:{de:0.38,mfi:"11.8 g/10min",dispersion:"Pass",moisture:"0.04%",result:"Pass",date:"20/09/2026",src:S('qc')}}
+  },
+  dispatches:{
+    "DN-2609-402":{dn:"DN-2609-402",customer:"Sagar Polypack",shade:"WS-4471",batch:"B-TS02-0908-B",qty:392,date:"09/09/2026",src:S('dispatch')},
+    "DN-2609-407":{dn:"DN-2609-407",customer:"Krishna Pipes",shade:"WS-0901",batch:"B-TS01-0910-A",qty:1188,date:"11/09/2026",src:S('dispatch'),complaint:"Black specks in 110 mm pipe"},
+    "DN-2609-411":{dn:"DN-2609-411",customer:"Vardhman Moulders",shade:"WS-0901",batch:"B-TS01-0912-B",qty:594,date:"13/09/2026",src:S('dispatch')},
+    "DN-2609-414":{dn:"DN-2609-414",customer:"Vardhman Moulders",shade:"WS-3108",batch:"B-TS02-0915-A",qty:296,date:"16/09/2026",src:S('dispatch')},
+    "DN-2609-419":{dn:"DN-2609-419",customer:"Sagar Polypack",shade:"WS-4471",batch:"B-TS02-0918-B",qty:294,date:"19/09/2026",src:S('dispatch')},
+    "DN-2609-423":{dn:"DN-2609-423",customer:"Shivam Containers",shade:"WS-0002",batch:"B-TS01-0920-A",qty:494,date:"21/09/2026",src:S('dispatch')}
+  }
+};
+
+/* ================= the five documents ================= */
+const ORDER = ['inward','labdip','batchlog','qc','dispatch'];
+const DOCS = {
+  inward:{en:'Inward register',
+    fields:[
+      {key:'supplier',en:'Supplier',hi:'सप्लायर',hint:'supplier or party name'},
+      {key:'material',en:'Material',hi:'माल',hint:'material name and grade'},
+      {key:'lot',en:'Supplier lot no.',hi:'सप्लायर लॉट नं.',hint:"the supplier's lot number, exactly as written"},
+      {key:'qty',en:'Net weight',hi:'शुद्ध वज़न',hint:'net weight received, with unit'},
+      {key:'date',en:'Date received',hi:'आने की तारीख',hint:'date as written'},
+      {key:'coa',en:'Value on CoA',hi:'CoA पर वैल्यू',hint:'the test value noted for the certificate of analysis'}],
+    truth:{supplier:'Navkar Colourchem',material:'Pigment Red 57:1',lot:'PR571-2409',qty:'150 kg',date:'24/09/2026',coa:'Strength 101.8%'},
+    low:['date'],
+    paper:{title:'INWARD REGISTER',form:'Stores  ·  Form F-02  ·  Page 118',rows:[
+      ['Date','24/09/2026',{smudge:true}],['Party / supplier','Navkar Colourchem'],['Challan no.','NC/1182'],
+      ['Material','Pigment Red 57:1'],['Supplier lot no.','PR571-2409'],['Qty received','150 kg   (6 bags x 25)'],
+      ['CoA','Recd.  Strength 101.8%'],['Received by','',{sign:true}]]}},
+  labdip:{en:'Lab dip sheet',
+    fields:[
+      {key:'shade',en:'Shade code',hi:'शेड कोड',hint:'shade code'},
+      {key:'name',en:'Shade name',hi:'शेड का नाम'},
+      {key:'customer',en:'Customer',hi:'ग्राहक'},
+      {key:'carrier',en:'Carrier',hi:'कैरियर',hint:'carrier resin'},
+      {key:'recipe',en:'Recipe',hi:'रेसिपी',hint:"each pigment or additive with its percent, written as 'NAME n%, NAME n%'"},
+      {key:'ldr',en:'Let-down ratio',hi:'लेट-डाउन अनुपात'},
+      {key:'de',en:'ΔE vs standard',hi:'मानक से ΔE',hint:'the delta E number'},
+      {key:'result',en:'Result',hi:'परिणाम',hint:'Approved or Rejected; read the stamp if there is one'}],
+    truth:{shade:'WS-6214',name:'Coral Red',customer:'Ashapura Plast',carrier:'PP homopolymer',recipe:'PR57:1 3.2%, TiO2 1.5%, PE wax 1.8%',ldr:'1:50 (2%)',de:'0.74',result:'Approved'},
+    low:['de'],
+    paper:{title:'LAB DIP / SHADE MATCH',form:'Lab  ·  Form F-07',rows:[
+      ['Shade code','WS-6214'],['Shade name','Coral Red'],['Customer','Ashapura Plast'],['Carrier','PP homopolymer'],
+      ['Recipe','PR57:1 3.2%,  TiO2 1.5%,  PE wax 1.8%'],['Let-down','1:50  (2%)'],['ΔE vs std','0.74'],
+      ['Result','',{stamp:'APPROVED'}],['Chemist','',{sign:true}]]}},
+  batchlog:{en:'Batch log sheet',
+    fields:[
+      {key:'batch',en:'Batch no.',hi:'बैच नं.'},
+      {key:'line',en:'Line / shift',hi:'लाइन / शिफ्ट'},
+      {key:'shade',en:'Shade code',hi:'शेड कोड'},
+      {key:'lots',en:'Lots charged',hi:'चार्ज किए लॉट',hint:"every lot number with its weight, written as 'LOT n kg; LOT n kg'"},
+      {key:'output',en:'Output',hi:'उत्पादन',hint:'output weight with unit'},
+      {key:'purge',en:'Purge / start-up loss',hi:'पर्ज / स्टार्ट-अप नुकसान',hint:'if a value is struck out, use the corrected value'},
+      {key:'date',en:'Date',hi:'तारीख'}],
+    truth:{batch:'B-TS01-0925-A',line:'TS-01, Shift A',shade:'WS-4471',lots:'PB153-2480 18.2 kg; TIO2-R902-2408 12 kg; WAX-PE-2407 8 kg; LL-MB-2409 361.8 kg',output:'396 kg',purge:'4 kg',date:'25/09/2026'},
+    low:['purge'],
+    paper:{title:'EXTRUDER BATCH LOG',form:'Production  ·  Form F-11',rows:[
+      ['Date','25/09/2026'],['Line / shift','TS-01 / A'],['Batch no.','B-TS01-0925-A'],['Shade','WS-4471'],
+      ['Lots charged','PB153-2480      18.2 kg'],['','TIO2-R902-2408   12 kg'],['','WAX-PE-2407      8 kg'],['','LL-MB-2409       361.8 kg'],
+      ['Output','396 kg'],['Purge / start-up','4 kg',{strike:'5 kg'}],['Remarks','रंग ठीक है'],['Operator','',{sign:true}]]}},
+  qc:{en:'QC register',
+    fields:[
+      {key:'batch',en:'Batch no.',hi:'बैच नं.'},
+      {key:'de',en:'ΔE vs standard',hi:'मानक से ΔE'},
+      {key:'mfi',en:'MFI',hi:'MFI'},
+      {key:'dispersion',en:'Dispersion',hi:'डिस्पर्शन'},
+      {key:'moisture',en:'Moisture',hi:'नमी'},
+      {key:'result',en:'Result',hi:'परिणाम',hint:'Pass or Fail'}],
+    truth:{batch:'B-TS01-0925-A',de:'0.66',mfi:'21.4 g/10min',dispersion:'Pass, no specks',moisture:'0.08%',result:'Pass'},
+    low:['moisture'],
+    paper:{title:'QC REGISTER',form:'Quality  ·  Form F-04',rows:[
+      ['Date','25/09/2026'],['Batch no.','B-TS01-0925-A'],['Shade','WS-4471'],['ΔE vs std','0.66'],['MFI','21.4 g/10min'],
+      ['Dispersion','Pass, no specks'],['Moisture','0.08 %',{smudge:true}],['Result','PASS'],['Checked by','',{sign:true}]]}},
+  dispatch:{en:'Dispatch slip',
+    fields:[
+      {key:'dn',en:'Dispatch note no.',hi:'डिस्पैच नोट नं.'},
+      {key:'customer',en:'Customer',hi:'ग्राहक'},
+      {key:'shade',en:'Shade code',hi:'शेड कोड'},
+      {key:'batch',en:'Batch no.',hi:'बैच नं.'},
+      {key:'qty',en:'Quantity',hi:'मात्रा',hint:'weight with unit'},
+      {key:'date',en:'Date',hi:'तारीख'}],
+    truth:{dn:'DN-2609-431',customer:'Sagar Polypack',shade:'WS-4471',batch:'B-TS01-0925-A',qty:'396 kg',date:'26/09/2026'},
+    low:[],
+    paper:{title:'DISPATCH SLIP',form:'Despatch  ·  Form F-03',rows:[
+      ['Date','26/09/2026'],['DN no.','DN-2609-431'],['Customer','Sagar Polypack'],['Shade','WS-4471'],
+      ['Batch','B-TS01-0925-A'],['Qty','396 kg   (16 bags)'],['Vehicle','MH-04-KF-2217'],['Prepared by','',{sign:true}]]}}
+};
+
+/* ================= shop-floor language ================= */
+const T = {
+  en:{docs:{inward:'Inward challan',labdip:'Lab dip sheet',batchlog:'Batch log',qc:'QC register',dispatch:'Dispatch slip'},
+    who:{inward:'Storekeeper',labdip:'Chemist',batchlog:'Extruder operator',qc:'QC assistant',dispatch:'Dispatch clerk'},
+    lang:'Screen language',filledBy:'Filled by',sampleSheet:'Sample sheet',yourPhoto:'Your photo',upload:'Use a photo instead',backSample:'Back to the sample sheet',
+    whatHappens:'When you read it',p1Live:'Claude reads the photo and fills in the fields.',p1Prep:'A prepared reading of this sheet fills in the fields.',
+    p2:'Anything it is unsure of waits for a person to confirm.',p3:'Every value is checked against the record before it is saved.',
+    read:'Read this document',prepared:'Show prepared reading',usePrepared:'Use prepared reading instead',
+    liveOn:'Live reading is on. It runs on your Claude account and asks once before the first read.',
+    liveOff:'Live photo reading is not available in this view, so the sample sheet uses a prepared reading.',
+    liveChecking:'Checking whether live reading is available',
+    reading:'Reading the document',readingNote:'This can take up to a minute.',stop:'Stop',
+    whatRead:'What it read',srcLive:'Live read',srcPrep:'Prepared reading',check:'Check this',ok:'Looks right',
+    checks:'Checks against the record',save:'Save to record',needConfirm:'Confirm the highlighted fields first.',needFix:'Fix the items marked in red first.',
+    saved:'Saved to the record',another:'Capture another document',inRecord:'In the record now',
+    n:{lots:'lots',shades:'shades',batches:'batches',dispatches:'dispatches'},
+    go:{inward:'See the lot in Material',labdip:'See the shade',batchlog:'See the batch under its shade',qc:'See its certificate',dispatch:'Trace this dispatch'}},
+  hi:{docs:{inward:'आवक चालान',labdip:'लैब डिप शीट',batchlog:'बैच लॉग',qc:'QC रजिस्टर',dispatch:'डिस्पैच स्लिप'},
+    who:{inward:'स्टोरकीपर',labdip:'केमिस्ट',batchlog:'एक्सट्रूडर ऑपरेटर',qc:'QC सहायक',dispatch:'डिस्पैच क्लर्क'},
+    lang:'स्क्रीन की भाषा',filledBy:'कौन भरता है',sampleSheet:'नमूना शीट',yourPhoto:'आपकी फोटो',upload:'इसकी जगह फोटो लें',backSample:'नमूना शीट पर वापस',
+    whatHappens:'पढ़ने पर क्या होगा',p1Live:'Claude फोटो पढ़कर फ़ील्ड भर देता है।',p1Prep:'इस शीट की तैयार रीडिंग फ़ील्ड भर देती है।',
+    p2:'जिस पर शक हो, वह इंसान की पुष्टि का इंतज़ार करता है।',p3:'सहेजने से पहले हर वैल्यू रिकॉर्ड से मिलाई जाती है।',
+    read:'यह दस्तावेज़ पढ़ें',prepared:'तैयार रीडिंग दिखाएँ',usePrepared:'इसकी जगह तैयार रीडिंग लें',
+    liveOn:'लाइव रीडिंग चालू है। यह आपके Claude अकाउंट से चलती है और पहली बार अनुमति पूछती है।',
+    liveOff:'इस व्यू में लाइव फोटो रीडिंग उपलब्ध नहीं है, इसलिए नमूना शीट की तैयार रीडिंग दिखेगी।',
+    liveChecking:'लाइव रीडिंग की जांच हो रही है',
+    reading:'दस्तावेज़ पढ़ रहे हैं',readingNote:'इसमें एक मिनट तक लग सकता है।',stop:'रोकें',
+    whatRead:'क्या पढ़ा गया',srcLive:'लाइव रीडिंग',srcPrep:'तैयार रीडिंग',check:'जांच लें',ok:'सही है',
+    checks:'रिकॉर्ड से मिलान',save:'रिकॉर्ड में सहेजें',needConfirm:'पहले हाइलाइट किए फ़ील्ड की पुष्टि करें।',needFix:'पहले लाल निशान वाली बातें ठीक करें।',
+    saved:'रिकॉर्ड में सहेजा गया',another:'दूसरा दस्तावेज़ दर्ज करें',inRecord:'अभी रिकॉर्ड में',
+    n:{lots:'लॉट',shades:'शेड',batches:'बैच',dispatches:'डिस्पैच'},
+    go:{inward:'माल में लॉट देखें',labdip:'शेड देखें',batchlog:'शेड में बैच देखें',qc:'प्रमाणपत्र देखें',dispatch:'यह डिस्पैच ट्रेस करें'}}
+};
+
+/* ================= helpers ================= */
+const num = s => { const m = String(s??'').replace(/,/g,'').match(/-?\d+(\.\d+)?/); return m ? parseFloat(m[0]) : NaN; };
+const kgs = n => (Math.round(n*10)/10).toLocaleString('en-IN',{maximumFractionDigits:1});
+const norm = s => String(s||'').toLowerCase().replace(/[\s._-]/g,'');
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const dm = s => String(s||'').match(/(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4})/);
+const fdate = s => { const m = dm(s); if(!m) return s||''; const y = m[3].length===2?'20'+m[3]:m[3]; return `${+m[1]} ${MON[+m[2]-1]||m[2]} ${y}`; };
+const dkey = s => { const m = dm(s); if(!m) return 0; const y = m[3].length===2?2000+ +m[3]:+m[3]; return y*10000+(+m[2])*100+(+m[1]); };
+function parseLots(s){ const out=[]; const re=/([A-Za-z0-9]+(?:-[A-Za-z0-9]+)+)\s*[:=–-]?\s*(\d[\d,]*(?:\.\d+)?)\s*kg/gi; let m; while((m=re.exec(String(s||'')))){ out.push({lot:m[1].toUpperCase(),kg:parseFloat(m[2].replace(/,/g,''))}); } return out; }
+function parseRecipe(s){ return String(s||'').split(/[,;\n]+/).map(p=>{ const m=p.trim().match(/^(.+?)\s*([\d.]+)\s*%$/); return m?{comp:m[1].trim(),pct:parseFloat(m[2])}:null; }).filter(Boolean); }
+function lev(a,b){ const d=[]; for(let i=0;i<=a.length;i++){d[i]=[i];} for(let j=1;j<=b.length;j++) d[0][j]=j; for(let i=1;i<=a.length;i++) for(let j=1;j<=b.length;j++) d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1)); return d[a.length][b.length]; }
+function closestLot(st,id){ let best=null,bd=9; for(const k of Object.keys(st.lots)){ const d=lev(k,id); if(d<bd){bd=d;best=k;} } return bd<=2?best:null; }
+function compFor(material){ const m=String(material).toLowerCase();
+  if(m.includes('blue 15')) return 'PB15:3'; if(m.includes('yellow 83')) return 'PY83'; if(m.includes('red 57')) return 'PR57:1';
+  if(m.includes('carbon black')) return 'CB N330'; if(m.includes('titanium')||m.includes('tio2')) return 'TiO2'; if(m.includes('wax')) return 'PE wax';
+  if(m.includes('lldpe')||m.includes('homopolymer')||m.includes('carrier')||m.includes('polypropylene')) return 'carrier'; return material; }
+const usedOf = (st,lotId) => Object.values(st.batches).reduce((a,b)=>a+b.lots.filter(l=>l.lot===lotId).reduce((x,l)=>x+l.kg,0),0);
+const shippedOf = (st,bId) => Object.values(st.dispatches).filter(d=>d.batch===bId).reduce((a,d)=>a+d.qty,0);
+const charged = b => b.lots.reduce((a,l)=>a+l.kg,0);
+function adherence(st,batch){
+  const shade=st.shades[batch.shade]; if(!shade) return null; const T0=charged(batch); if(!T0) return null;
+  const by={}; for(const l of batch.lots){ const lot=st.lots[l.lot]; if(!lot) return null; const k=norm(lot.comp); by[k]=(by[k]||0)+l.kg; }
+  const rows=shade.recipe.map(r=>{ const exp=T0*r.pct/100, act=by[norm(r.comp)]||0; delete by[norm(r.comp)]; return {comp:r.comp,exp,act,dev:exp?(act-exp)/exp*100:0}; });
+  const ps=shade.recipe.reduce((a,r)=>a+r.pct,0), cexp=T0*(100-ps)/100, cact=by['carrier']||0; delete by['carrier'];
+  rows.push({comp:'Carrier',exp:cexp,act:cact,dev:cexp?(cact-cexp)/cexp*100:0});
+  for(const k of Object.keys(by)) rows.push({comp:k,exp:0,act:by[k],dev:null,extra:true});
+  const worst=Math.max(...rows.map(r=>r.extra?999:Math.abs(r.dev)));
+  return {rows,worst};
+}
+const SRCNAME = {inward:'Inward register',labdip:'Lab dip sheet',batchlog:'Batch log sheet',qc:'QC register',dispatch:'Dispatch slip'};
+function provText(src){
+  if(!src) return 'No source on record.';
+  const n=SRCNAME[src.type]||'Record';
+  if(src.mode==='seed') return `${n}. Sample record loaded with the demo.`;
+  const when = src.at ? new Date(src.at).toLocaleString('en-IN',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '';
+  return `${n}, photographed ${when}. ${src.mode==='live'?'Read live by Claude':'Prepared reading'}, then confirmed by a person on the floor.`;
+}
+
+/* ================= checks (plain logic, no AI) ================= */
+function runChecks(type,v,st,lang){
+  const out=[]; const E=(en,hi,fix)=>out.push({level:'err',text:msg(lang,en,hi),fix}); const W=(en,hi)=>out.push({level:'warn',text:msg(lang,en,hi)}); const K=(en,hi)=>out.push({level:'ok',text:msg(lang,en,hi)});
+  if(type==='inward'){
+    const lot=String(v.lot||'').trim().toUpperCase(), q=num(v.qty);
+    if(!lot) E('Lot number is missing.','लॉट नंबर नहीं मिला।');
+    else if(st.lots[lot]) E(`Lot ${lot} is already in the inward register.`,`लॉट ${lot} पहले से आवक रजिस्टर में है।`);
+    if(isNaN(q)) E('Net weight is not a number.','शुद्ध वज़न संख्या नहीं है।');
+    if(!String(v.coa||'').trim()) W('No CoA value recorded. Ask the supplier for the test certificate.','CoA की कोई वैल्यू नहीं है। सप्लायर से टेस्ट सर्टिफिकेट मांगें।');
+    if(lot && !st.lots[lot] && !isNaN(q)) K(`New lot ${lot}: ${kgs(q)} kg of ${v.material}.`,`नया लॉट ${lot}: ${v.material} का ${kgs(q)} kg।`);
+  }
+  if(type==='labdip'){
+    const code=String(v.shade||'').trim().toUpperCase(), de=num(v.de), rec=parseRecipe(v.recipe), tot=rec.reduce((a,r)=>a+r.pct,0);
+    if(!code) E('Shade code is missing.','शेड कोड नहीं मिला।');
+    if(isNaN(de)) E('ΔE is not a number.','ΔE संख्या नहीं है।');
+    if(!rec.length) E('Could not read the recipe components.','रेसिपी के हिस्से पढ़े नहीं जा सके।');
+    else if(tot>=100) E('Recipe adds up to 100% or more, leaving no room for carrier.','रेसिपी 100% या उससे ज़्यादा है, कैरियर के लिए जगह नहीं।');
+    if(code && st.shades[code]) W(`This replaces the recipe of record for ${code}.`,`यह ${code} की रिकॉर्ड रेसिपी को बदल देगा।`);
+    if(/approv/i.test(v.result) && de>1.0) W(`Marked approved with ΔE ${de}, above the usual 1.0 limit.`,`ΔE ${de} पर मंज़ूर, जो सामान्य 1.0 सीमा से ऊपर है।`);
+    if(code && rec.length && tot<100 && !isNaN(de)) K(`Recipe of record: ${rec.length} components plus carrier, let-down ${v.ldr}.`,`रिकॉर्ड रेसिपी: ${rec.length} हिस्से और कैरियर, लेट-डाउन ${v.ldr}।`);
+  }
+  if(type==='batchlog'){
+    const id=String(v.batch||'').trim().toUpperCase(), sh=String(v.shade||'').trim().toUpperCase(), lots=parseLots(v.lots), outKg=num(v.output), pg=num(v.purge);
+    if(!id) E('Batch number is missing.','बैच नंबर नहीं मिला।'); else if(st.batches[id]) E(`Batch ${id} is already in the record.`,`बैच ${id} पहले से रिकॉर्ड में है।`);
+    if(!st.shades[sh]) E(`Shade ${sh||'(blank)'} has no recipe of record. Capture its lab dip sheet first.`,`शेड ${sh||'(खाली)'} की कोई रिकॉर्ड रेसिपी नहीं है। पहले उसकी लैब डिप शीट दर्ज करें।`);
+    if(!lots.length) E('Could not read the lots charged.','चार्ज किए गए लॉट पढ़े नहीं जा सके।');
+    let allFound=true;
+    for(const l of lots){
+      const lot=st.lots[l.lot];
+      if(!lot){ allFound=false; const c=closestLot(st,l.lot);
+        E(`Lot ${l.lot} is not in the inward register.${c?` The closest lot on record is ${c}.`:''}`,`लॉट ${l.lot} आवक रजिस्टर में नहीं है।${c?` रिकॉर्ड में सबसे मिलता लॉट ${c} है।`:''}`,
+          c?{label:msg(lang,`Use ${c}`,`${c} लें`),patch:{lots:String(v.lots).replace(new RegExp(l.lot.replace(/[-]/g,'\\-'),'i'),c)}}:null);
+      } else { const rem=lot.qty-usedOf(st,l.lot); if(l.kg>rem+0.01) E(`Lot ${l.lot} has only ${kgs(rem)} kg left.`,`लॉट ${l.lot} में सिर्फ़ ${kgs(rem)} kg बचा है।`); }
+    }
+    if(lots.length && !isNaN(outKg) && !isNaN(pg)){
+      const tin=lots.reduce((a,l)=>a+l.kg,0), acc=outKg+pg, d=Math.abs(tin-acc);
+      if(d<=0.5) K(`Balance closes: ${kgs(tin)} kg charged, ${kgs(acc)} kg accounted for.`,`हिसाब बराबर: ${kgs(tin)} kg चार्ज, ${kgs(acc)} kg का हिसाब।`);
+      else W(`Balance is off by ${kgs(d)} kg: ${kgs(tin)} kg charged, ${kgs(acc)} kg accounted for.`,`हिसाब ${kgs(d)} kg से गड़बड़: ${kgs(tin)} kg चार्ज, ${kgs(acc)} kg का हिसाब।`);
+      if(tin>0 && pg/tin>0.03) W(`Purge loss ${(pg/tin*100).toFixed(1)}% is above the 3% norm.`,`पर्ज नुकसान ${(pg/tin*100).toFixed(1)}% है, 3% सीमा से ज़्यादा।`);
+    } else E('Output or purge is not a number.','उत्पादन या पर्ज संख्या नहीं है।');
+    if(lots.length && st.shades[sh]){
+      if(!allFound) out.push({level:'warn',text:msg(lang,'Recipe check waits until every lot is matched.','सभी लॉट मिलने के बाद रेसिपी जांच होगी।')});
+      else { const a=adherence(st,{shade:sh,lots}); if(a){ const off=a.rows.filter(r=>r.extra||Math.abs(r.dev)>5);
+        if(!off.length) K(`Charge matches the recipe of record for ${sh}, every component within 5%.`,`चार्ज ${sh} की रिकॉर्ड रेसिपी से मेल खाता है, हर हिस्सा 5% के अंदर।`);
+        off.forEach(r=>W(r.extra?`${r.comp} is not in the recipe for ${sh}.`:`${r.comp}: ${kgs(r.act)} kg charged against ${kgs(r.exp)} kg in the recipe (${r.dev>0?'+':''}${r.dev.toFixed(1)}%).`,
+                         r.extra?`${r.comp} ${sh} की रेसिपी में नहीं है।`:`${r.comp}: रेसिपी में ${kgs(r.exp)} kg, चार्ज ${kgs(r.act)} kg (${r.dev>0?'+':''}${r.dev.toFixed(1)}%)।`)); } }
+    }
+  }
+  if(type==='qc'){
+    const id=String(v.batch||'').trim().toUpperCase(), b=st.batches[id], de=num(v.de);
+    if(!id) E('Batch number is missing.','बैच नंबर नहीं मिला।');
+    else if(!b) E(`Batch ${id} is not in the record yet. Capture its batch log first.`,`बैच ${id} अभी रिकॉर्ड में नहीं है। पहले उसका बैच लॉग दर्ज करें।`);
+    if(isNaN(de)) E('ΔE is not a number.','ΔE संख्या नहीं है।');
+    if(b && b.qc) W('This replaces the QC reading already on record.','यह रिकॉर्ड में मौजूद QC रीडिंग को बदल देगा।');
+    if(!isNaN(de) && de>1.0 && /pass/i.test(v.result)) W(`ΔE ${de} is above 1.0 but marked pass.`,`ΔE ${de}, 1.0 से ऊपर है लेकिन पास लिखा है।`);
+    if(b && !isNaN(de)){ const s=st.shades[b.shade]; if(s) K(`ΔE ${de} for this batch; ${s.code} was approved at ΔE ${s.de}.`,`इस बैच का ΔE ${de}; ${s.code} की मंज़ूरी ΔE ${s.de} पर हुई थी।`); }
+  }
+  if(type==='dispatch'){
+    const dn=String(v.dn||'').trim().toUpperCase(), id=String(v.batch||'').trim().toUpperCase(), b=st.batches[id], sh=String(v.shade||'').trim().toUpperCase(), q=num(v.qty);
+    if(!dn) E('Dispatch note number is missing.','डिस्पैच नोट नंबर नहीं मिला।'); else if(st.dispatches[dn]) E(`${dn} is already in the record.`,`${dn} पहले से रिकॉर्ड में है।`);
+    if(!b) E(`Batch ${id||'(blank)'} is not in the record yet. Capture its batch log first.`,`बैच ${id||'(खाली)'} अभी रिकॉर्ड में नहीं है। पहले उसका बैच लॉग दर्ज करें।`);
+    if(isNaN(q)) E('Quantity is not a number.','मात्रा संख्या नहीं है।');
+    if(b){
+      if(b.shade!==sh) E(`Batch ${id} is shade ${b.shade}, not ${sh}.`,`बैच ${id} शेड ${b.shade} का है, ${sh} का नहीं।`);
+      const avail=b.output-shippedOf(st,id); if(!isNaN(q) && q>avail+0.01) E(`Only ${kgs(avail)} kg of batch ${id} is left to dispatch.`,`बैच ${id} में भेजने को सिर्फ़ ${kgs(avail)} kg बचा है।`);
+      if(!b.qc) W('This batch has no QC reading on record, so no certificate can be issued for it yet.','इस बैच की कोई QC रीडिंग नहीं है, इसलिए अभी प्रमाणपत्र नहीं बन सकता।');
+      const s=st.shades[b.shade]; if(s && !s.catalogue && s.customer && norm(s.customer)!==norm(v.customer)) W(`Shade ${s.code} was matched for ${s.customer}.`,`शेड ${s.code} ${s.customer} के लिए बनाया गया था।`);
+      if(b.shade===sh && !isNaN(q) && q<=avail+0.01) K(`${kgs(q)} kg of ${sh} to ${v.customer}.`,`${v.customer} को ${sh} का ${kgs(q)} kg।`);
+    }
+  }
+  return out;
+}
+
+/* ================= commit to the record ================= */
+function commit(type,v,st,mode){
+  const n=clone(st); const src={type,mode,at:new Date().toISOString()};
+  if(type==='inward'){ const id=String(v.lot).trim().toUpperCase(); n.lots[id]={id,material:v.material,comp:compFor(v.material),supplier:v.supplier,qty:num(v.qty),date:v.date,coa:v.coa,src}; return {n,id}; }
+  if(type==='labdip'){ const id=String(v.shade).trim().toUpperCase(); n.shades[id]={code:id,name:v.name,customer:v.customer,catalogue:false,carrier:v.carrier,recipe:parseRecipe(v.recipe),ldr:v.ldr,de:num(v.de),result:v.result,date:new Date().toLocaleDateString('en-GB'),src}; return {n,id}; }
+  if(type==='batchlog'){ const id=String(v.batch).trim().toUpperCase(); n.batches[id]={id,line:v.line,shade:String(v.shade).trim().toUpperCase(),date:v.date,lots:parseLots(v.lots),output:num(v.output),purge:num(v.purge),qc:null,src}; return {n,id:n.batches[id].shade,batch:id}; }
+  if(type==='qc'){ const id=String(v.batch).trim().toUpperCase(); n.batches[id].qc={de:num(v.de),mfi:v.mfi,dispersion:v.dispersion,moisture:v.moisture,result:v.result,date:new Date().toLocaleDateString('en-GB'),src}; return {n,id}; }
+  if(type==='dispatch'){ const id=String(v.dn).trim().toUpperCase(); n.dispatches[id]={dn:id,customer:v.customer,shade:String(v.shade).trim().toUpperCase(),batch:String(v.batch).trim().toUpperCase(),qty:num(v.qty),date:v.date,src}; return {n,id}; }
+}
+const GOTAB = {inward:'material',labdip:'shades',batchlog:'shades',qc:'certs',dispatch:'trace'};
+
+/* ================= drawing the paper sheet ================= */
+function fitText(c,txt,x,y,maxW){ let s=30; do{ c.font=`${s}px "Kalam","Comic Sans MS",cursive`; if(c.measureText(txt).width<=maxW) break; s-=2; }while(s>18); c.fillText(txt,x,y); }
+async function drawDoc(cv,p){
+  const W=820, top=150, rh=62, H=top+p.rows.length*rh+54; cv.width=W; cv.height=H;
+  try{ await Promise.all([document.fonts.load('30px "Kalam"'),document.fonts.load('30px "Kalam"','रंग'),document.fonts.load('600 28px "Archivo"'),document.fonts.load('17px "Source Sans 3"')]); }catch(e){}
+  const c=cv.getContext('2d'); c.textAlign='left';
+  c.fillStyle='#F5F0E4'; c.fillRect(0,0,W,H);
+  c.fillStyle='#262320'; c.font='600 28px "Archivo",Arial,sans-serif'; c.fillText(p.title,44,66);
+  c.fillStyle='#766C5F'; c.font='17px "Source Sans 3",Arial,sans-serif'; c.fillText(p.form,44,96);
+  c.strokeStyle='#262320'; c.lineWidth=2; c.beginPath(); c.moveTo(44,116); c.lineTo(W-44,116); c.stroke();
+  c.strokeStyle='rgba(185,70,60,0.35)'; c.lineWidth=1.5; c.beginPath(); c.moveTo(262,122); c.lineTo(262,H-20); c.stroke();
+  p.rows.forEach((r,i)=>{
+    const yb=top+i*rh, base=yb+38;
+    c.strokeStyle='rgba(70,100,150,0.20)'; c.lineWidth=1; c.beginPath(); c.moveTo(44,yb+rh-8); c.lineTo(W-44,yb+rh-8); c.stroke();
+    if(r[0]){ c.fillStyle='#766C5F'; c.font='17px "Source Sans 3",Arial,sans-serif'; c.fillText(r[0],44,base); }
+    const o=r[2]||{}; let x=282; c.fillStyle='#1F3B7A';
+    if(o.strike){ c.font='28px "Kalam","Comic Sans MS",cursive'; c.fillText(o.strike,x,base); const w=c.measureText(o.strike).width; c.strokeStyle='#1F3B7A'; c.lineWidth=2.5; c.beginPath(); c.moveTo(x-4,base-8); c.lineTo(x+w+4,base-14); c.stroke(); x+=w+26; c.fillStyle='#1F3B7A'; }
+    if(r[1]) fitText(c,r[1],x,base,W-44-x);
+    if(o.smudge){ c.fillStyle='rgba(90,80,70,0.14)'; c.beginPath(); c.ellipse(x+74,base-10,66,17,-0.08,0,Math.PI*2); c.fill(); }
+    if(o.stamp){ c.save(); c.translate(x+118,base-10); c.rotate(-0.12); c.strokeStyle='rgba(178,34,34,0.78)'; c.lineWidth=3; c.strokeRect(-104,-26,208,50); c.fillStyle='rgba(178,34,34,0.82)'; c.font='600 27px "Archivo",Arial,sans-serif'; c.textAlign='center'; c.fillText(o.stamp,0,9); c.restore(); c.textAlign='left'; }
+    if(o.sign){ c.strokeStyle='#1F3B7A'; c.lineWidth=2; c.beginPath(); c.moveTo(x,base-4); c.bezierCurveTo(x+30,base-34,x+48,base+10,x+78,base-12); c.bezierCurveTo(x+100,base-30,x+112,base+2,x+150,base-8); c.stroke(); }
+  });
+}
+const canvasBlob = cv => new Promise((res,rej)=>cv.toBlob(b=>b?res(b):rej({code:'image_rejected'}),'image/jpeg',0.92));
+
+/* ================= asking Claude to read a photo ================= */
+function buildPrompt(doc){
+  const lines=doc.fields.map(f=>`- ${f.key}: ${f.en}${f.hint?` (${f.hint})`:''}`).join('\n');
+  return `The image is a photograph of a paper "${doc.en}" from a masterbatch (plastic colour concentrate) factory in India. It may be printed, handwritten, or both, and may include Hindi, Gujarati or Marathi.
+
+Read these fields:
+${lines}
+
+Rules:
+- Copy each value exactly as written. Do not correct spelling, complete numbers, or guess.
+- If a value is struck out and rewritten, use the rewritten value.
+- If a field is smudged, faint, or you are not sure of every character, still give your best reading but set confidence to "low". Use "" only if nothing is written.
+- Never invent a lot number, weight or test reading.
+
+Reply with only this JSON:
+{"fields":[{"key":"<key>","value":"<text>","confidence":"high" or "low"}],"note":"<one short sentence on anything unclear, or empty>"}`;
+}
+function normalize(doc,out){
+  const arr=Array.isArray(out&&out.fields)?out.fields:[];
+  return doc.fields.map(f=>{ const h=arr.find(x=>x&&String(x.key)===f.key); const value=h&&h.value!=null?String(h.value).trim():''; const conf=h&&h.confidence==='high'&&value?'high':'low'; return {key:f.key,value,conf,confirmed:conf==='high'}; });
+}
+function useSampler(){
+  const [s,setS]=useState({ready:false,fn:null,images:false,types:[]});
+  useEffect(()=>{ let on=true; (async()=>{ try{
+      const c=window.claude; const fn=c&&typeof c.use==='function'?await c.use('sample'):null;
+      if(!fn){ on&&setS({ready:true,fn:null,images:false,types:[]}); return; }
+      const caps=await fn.limits().catch(()=>null);
+      on&&setS({ready:true,fn,images:!!(caps&&caps.images),types:(caps&&caps.images&&caps.images.mediaTypes)||[]});
+    }catch(e){ on&&setS({ready:true,fn:null,images:false,types:[]}); } })(); return ()=>{on=false;}; },[]);
+  return [s,setS];
+}
+const ERRS = {
+  rate_limited:['Too many reads just now. Try again in a minute, or use the prepared reading.','अभी बहुत ज़्यादा रीडिंग हो गई। एक मिनट बाद फिर कोशिश करें, या तैयार रीडिंग लें।'],
+  session_expired:['Sign in to Claude again to read photos.','फोटो पढ़ने के लिए Claude में फिर से साइन इन करें।'],
+  image_rejected:['That photo could not be used. Try a JPEG or PNG under 20 MB.','यह फोटो इस्तेमाल नहीं हो सकी। 20 MB से छोटी JPEG या PNG लें।'],
+  refused:['Claude declined to read this image. Try a different photo.','Claude ने यह फोटो नहीं पढ़ी। दूसरी फोटो लें।'],
+  invalid_json:['The reading came back incomplete. Try again, or use the prepared reading.','रीडिंग अधूरी आई। फिर कोशिश करें, या तैयार रीडिंग लें।'],
+  empty_completion:['The reading came back empty. Try again, or use the prepared reading.','रीडिंग खाली आई। फिर कोशिश करें, या तैयार रीडिंग लें।']
+};
+const HIDE = ['not_granted','sampling_disabled','not_declared','capability_disabled','capability_removed','images_unavailable'];
+
+/* ================= Capture ================= */
+function Capture({st,setSt,go,sampler,setSampler,lang,setLang,toast}){
+  const t=T[lang];
+  const [type,setType]=useState('batchlog');
+  const [photo,setPhoto]=useState(null);
+  const [phase,setPhase]=useState('idle');
+  const [fields,setFields]=useState(null);
+  const [source,setSource]=useState(null);
+  const [note,setNote]=useState('');
+  const [err,setErr]=useState('');
+  const [saved,setSaved]=useState(null);
+  const cvRef=useRef(null), ctlRef=useRef(null), fileRef=useRef(null);
+  const doc=DOCS[type];
+  const live=!!(sampler.fn&&sampler.images);
+
+  useEffect(()=>{ if(!photo&&cvRef.current) drawDoc(cvRef.current,doc.paper); },[type,photo]);
+  useEffect(()=>()=>{ ctlRef.current&&ctlRef.current.abort(); },[]);
+
+  function clear(next){ ctlRef.current&&ctlRef.current.abort(); setPhase('idle'); setFields(null); setSource(null); setNote(''); setErr(''); setSaved(null);
+    if(photo){ URL.revokeObjectURL(photo.url); setPhoto(null); } if(next) setType(next); }
+  function pickPhoto(e){ const f=e.target.files&&e.target.files[0]; e.target.value=''; if(!f) return; if(photo) URL.revokeObjectURL(photo.url);
+    setPhoto({file:f,url:URL.createObjectURL(f)}); setPhase('idle'); setFields(null); setErr(''); setSaved(null); }
+  async function readLive(){
+    setErr(''); setPhase('reading'); const ctl=new AbortController(); ctlRef.current=ctl;
+    try{
+      const blob=photo?photo.file:await canvasBlob(cvRef.current);
+      const out=await sampler.fn.json(buildPrompt(doc),{images:blob,signal:ctl.signal});
+      setFields(normalize(doc,out)); setSource('live'); setNote(String((out&&out.note)||'')); setPhase('review');
+    }catch(e){
+      const code=e&&e.code;
+      if(code==='cancelled'){ setPhase('idle'); return; }
+      if(HIDE.includes(code)){ setSampler(s=>({...s,fn:null,images:false})); setErr(msg(lang,'Live reading is not allowed in this view. The sample sheet can still use its prepared reading.','इस व्यू में लाइव रीडिंग की अनुमति नहीं है। नमूना शीट की तैयार रीडिंग अब भी ली जा सकती है।')); setPhase('idle'); return; }
+      const m=ERRS[code]||['The reading was interrupted. Try again.','रीडिंग बीच में रुक गई। फिर कोशिश करें।']; setErr(msg(lang,m[0],m[1])); setPhase('idle');
+    }
+  }
+  function prepared(){ setErr(''); setFields(doc.fields.map(f=>{ const low=doc.low.includes(f.key); return {key:f.key,value:doc.truth[f.key]||'',conf:low?'low':'high',confirmed:!low}; })); setSource('prepared'); setNote(''); setPhase('review'); }
+  const setVal=(k,v)=>setFields(fs=>fs.map(f=>f.key===k?{...f,value:v,confirmed:true}:f));
+  const okField=k=>setFields(fs=>fs.map(f=>f.key===k?{...f,confirmed:true}:f));
+  const applyPatch=p=>setFields(fs=>fs.map(f=>f.key in p?{...f,value:p[f.key],confirmed:true}:f));
+
+  const vals=fields?Object.fromEntries(fields.map(f=>[f.key,f.value])):{};
+  const checks=fields?runChecks(type,vals,st,lang):[];
+  const unconfirmed=fields?fields.some(f=>!f.confirmed):false;
+  const hasErr=checks.some(c=>c.level==='err');
+  function save(){ const r=commit(type,vals,st,source); setSt(r.n); setSaved(r); setPhase('saved'); toast(t.saved); }
+
+  const counts=[['lots',Object.keys(st.lots).length],['shades',Object.keys(st.shades).length],['batches',Object.keys(st.batches).length],['dispatches',Object.keys(st.dispatches).length]];
+
+  return (
+    <div>
+      <div className="head">
+        <div><h1>{msg(lang,'Photograph the paper. The record builds itself.','कागज़ की फोटो लें। रिकॉर्ड अपने आप बनता है।')}</h1>
+          <p>{msg(lang,'Five sheets your people already fill in, in the order material moves through the plant. Nobody types, nobody scans a barcode.','पाँच शीट जो आपके लोग पहले से भरते हैं, उसी क्रम में जैसे माल प्लांट में चलता है। न टाइपिंग, न बारकोड।')}</p></div>
+        <div style={{display:'flex',alignItems:'center',gap:8}}><span className="dim" style={{fontSize:13}}>{t.lang}</span>
+          <div className="seg" role="group" aria-label="Screen language">
+            <button aria-pressed={lang==='en'} onClick={()=>setLang('en')}>English</button>
+            <button aria-pressed={lang==='hi'} onClick={()=>setLang('hi')}>हिंदी</button></div></div>
+      </div>
+
+      <div className="steps">
+        {ORDER.map((k,i)=><button key={k} className="step" aria-pressed={type===k} onClick={()=>clear(k)}>
+          <span className="n">{i+1}</span><span style={{minWidth:0}}><b>{t.docs[k]}</b><small>{t.who[k]}</small></span></button>)}
+      </div>
+
+      <div className="split">
+        <div className="card">
+          <div className="card-h"><div><div className="eyebrow">{t.filledBy}: {t.who[type]}</div><h2>{t.docs[type]}</h2></div>
+            <span className="tag">{photo?t.yourPhoto:t.sampleSheet}</span></div>
+          <div className="docframe">{photo?<img src={photo.url} alt={t.yourPhoto}/>:<canvas ref={cvRef} role="img" aria-label={`${doc.en}, sample sheet`}/>}</div>
+          {(live||photo)&&<div className="card-f">
+            {live&&<button className="btn btn-s" onClick={()=>fileRef.current&&fileRef.current.click()} disabled={phase==='reading'}>{t.upload}</button>}
+            {photo&&<button className="lnk" onClick={()=>clear()}>{t.backSample}</button>}
+            <input ref={fileRef} id="photo-input" type="file" accept={(sampler.types&&sampler.types.length?sampler.types:['image/jpeg','image/png','image/webp']).join(',')} hidden onChange={pickPhoto}/>
+          </div>}
+        </div>
+
+        <div className="card">
+          {phase==='idle'&&<>
+            <div className="card-h"><h2>{t.whatHappens}</h2></div>
+            <div className="card-b stack">
+              <ul className="points">
+                <li><span className="k">01</span><span>{live?t.p1Live:t.p1Prep}</span></li>
+                <li><span className="k">02</span><span>{t.p2}</span></li>
+                <li><span className="k">03</span><span>{t.p3}</span></li>
+              </ul>
+              {err&&<div className="errbox" role="alert">{err}</div>}
+              <div style={{display:'flex',flexWrap:'wrap',gap:10,alignItems:'center'}}>
+                {live&&<button className="btn btn-p" onClick={readLive}>{t.read}</button>}
+                {!photo&&(live?<button className="lnk" onClick={prepared}>{t.usePrepared}</button>:<button className="btn btn-p" onClick={prepared}>{t.prepared}</button>)}
+              </div>
+              <div className={'status'+(live?' on':'')}>{!sampler.ready?t.liveChecking+'…':(live?t.liveOn:t.liveOff)}</div>
+            </div></>}
+
+          {phase==='reading'&&<>
+            <div className="card-h"><h2>{t.whatRead}</h2></div>
+            <div className="card-b stack" aria-live="polite">
+              <div style={{display:'flex',gap:10,alignItems:'center'}}><span className="spin" aria-hidden="true"></span><b>{t.reading}…</b></div>
+              <div className="dim" style={{fontSize:13.5}}>{t.readingNote}</div>
+              <div><button className="btn btn-s" onClick={()=>ctlRef.current&&ctlRef.current.abort()}>{t.stop}</button></div>
+            </div></>}
+
+          {phase==='review'&&fields&&<>
+            <div className="card-h"><h2>{t.whatRead}</h2><span className={'tag '+(source==='live'?'ok':'')}>{source==='live'?t.srcLive:t.srcPrep}</span></div>
+            <div className="card-b stack">
+              {note&&<div className="status">{note}</div>}
+              <div>{fields.map(f=>{ const d=doc.fields.find(x=>x.key===f.key); const low=!f.confirmed; return (
+                <div key={f.key} className={'frow'+(low?' low':'')}>
+                  <label htmlFor={'f-'+type+'-'+f.key}>{lang==='hi'?d.hi:d.en}</label>
+                  {(f.key==='lots'||f.key==='recipe')
+                    ?<textarea id={'f-'+type+'-'+f.key} rows={3} value={f.value} onChange={e=>setVal(f.key,e.target.value)} spellCheck={false}/>
+                    :<input id={'f-'+type+'-'+f.key} value={f.value} onChange={e=>setVal(f.key,e.target.value)} spellCheck={false}/>}
+                  {low&&<div className="act"><span className="tag warn">{t.check}</span><button className="btn btn-s" onClick={()=>okField(f.key)}>{t.ok}</button></div>}
+                </div>); })}</div>
+              <div>
+                <div className="eyebrow" style={{marginBottom:8}}>{t.checks}</div>
+                <div className="stack" style={{gap:8}}>
+                  {checks.map((c,i)=><div key={i} className={'chk '+c.level}><span className="ic" aria-hidden="true">{c.level==='ok'?'✓':c.level==='warn'?'!':'✕'}</span>
+                    <div className="body">{c.text}{c.fix&&<div className="fix"><button className="btn btn-s" onClick={()=>applyPatch(c.fix.patch)}>{c.fix.label}</button></div>}</div></div>)}
+                </div>
+              </div>
+            </div>
+            <div className="card-f">
+              <button className="btn btn-p" onClick={save} disabled={hasErr||unconfirmed}>{t.save}</button>
+              {(hasErr||unconfirmed)&&<span className="dim" style={{fontSize:13}}>{unconfirmed?t.needConfirm:t.needFix}</span>}
+              <button className="lnk" style={{marginLeft:'auto'}} onClick={()=>{setPhase('idle');setFields(null);}}>{msg(lang,'Discard','रद्द करें')}</button>
+            </div></>}
+
+          {phase==='saved'&&saved&&<>
+            <div className="card-h"><h2>{t.saved}</h2></div>
+            <div className="card-b stack">
+              <div className="savedbox"><b className="mono">{saved.batch||saved.id}</b> {msg(lang,'is now part of the record, linked to everything it touches.','अब रिकॉर्ड का हिस्सा है, हर जुड़ी चीज़ से लिंक्ड।')}</div>
+              <div style={{display:'flex',flexWrap:'wrap',gap:10}}>
+                <button className="btn btn-p" onClick={()=>go(GOTAB[type],saved.id)}>{t.go[type]}</button>
+                <button className="btn" onClick={()=>{ const i=ORDER.indexOf(type); clear(ORDER[Math.min(i+1,ORDER.length-1)]); }}>{t.another}</button>
+              </div>
+            </div></>}
+        </div>
+      </div>
+
+      <div className="counts"><span className="eyebrow" style={{alignSelf:'center'}}>{t.inRecord}</span>
+        {counts.map(([k,n])=><span key={k}><b>{n}</b>{t.n[k]}</span>)}</div>
+    </div>
+  );
+}
+
+/* ================= Shades ================= */
+function Shades({st,focus}){
+  const [q,setQ]=useState(''); const [sel,setSel]=useState('WS-4471');
+  useEffect(()=>{ if(focus&&focus.tab==='shades'&&focus.id&&st.shades[focus.id]) setSel(focus.id); },[focus]);
+  const all=Object.values(st.shades).sort((a,b)=>a.code.localeCompare(b.code));
+  const list=all.filter(s=>!q||[s.code,s.name,s.customer].join(' ').toLowerCase().includes(q.toLowerCase()));
+  const s=st.shades[sel]||all[0];
+  const bs=s?Object.values(st.batches).filter(b=>b.shade===s.code).sort((a,b)=>dkey(b.date)-dkey(a.date)):[];
+  const ds=s?Object.values(st.dispatches).filter(d=>d.shade===s.code).sort((a,b)=>dkey(b.date)-dkey(a.date)):[];
+  const last=ds[0]; const lastB=last&&st.batches[last.batch];
+  const ps=s?s.recipe.reduce((a,r)=>a+r.pct,0):0;
+  return (<div>
+    <div className="head"><div><h1>Shade memory</h1><p>Every shade your lab has matched, the recipe it was approved on, and every batch made of it since. The question this answers in seconds: what did we ship this customer last time, and what was in it.</p></div></div>
+    <div className="split l">
+      <div className="card"><div className="card-b" style={{paddingBottom:10}}><label className="eyebrow" htmlFor="shade-q">Search</label>
+        <input id="shade-q" className="search" style={{marginTop:6}} placeholder="Customer, code or name" value={q} onChange={e=>setQ(e.target.value)}/></div>
+        <div className="rows">{list.map(x=>{ const n=Object.values(st.batches).filter(b=>b.shade===x.code).length; return (
+          <button key={x.code} className="row" aria-pressed={s&&x.code===s.code} onClick={()=>setSel(x.code)}>
+            <span style={{minWidth:0}}><span className="t1"><span className="mono">{x.code}</span> · {x.name}</span><span className="t2" style={{display:'block'}}>{x.catalogue?'Catalogue grade':x.customer}</span></span>
+            <span className="t2 num">{n} {n===1?'batch':'batches'}</span></button>); })}
+          {!list.length&&<div className="card-b dim">No shade matches that search.</div>}</div></div>
+      {s&&<div className="card"><div className="card-h"><div><div className="eyebrow">{s.catalogue?'Catalogue grade':'Matched for '+s.customer}</div><h2><span className="mono">{s.code}</span> · {s.name}</h2></div>
+        <span className={'tag '+(/approv/i.test(s.result)?'ok':'warn')}>{s.result}</span></div>
+        <div className="card-b stack">
+          {last?<div className="lead">Last shipped to <b>{last.customer}</b> on {fdate(last.date)}, batch <span className="mono">{last.batch}</span>{lastB&&lastB.qc?<>, ΔE <span className="mono">{lastB.qc.de}</span></>:null}.</div>
+               :<div className="lead">Not shipped yet. The recipe of record is ready for the first batch.</div>}
+          <div className="kv">
+            <div><div className="eyebrow">Carrier</div><div className="v">{s.carrier}</div></div>
+            <div><div className="eyebrow">Let-down</div><div className="v">{s.ldr}</div></div>
+            <div><div className="eyebrow">ΔE at approval</div><div className="v">{s.de}</div></div>
+            <div><div className="eyebrow">Approved</div><div className="v">{fdate(s.date)}</div></div>
+          </div>
+          <div><div className="eyebrow" style={{marginBottom:6}}>Recipe of record</div>
+            <div className="tw"><table className="t"><thead><tr><th>Component</th><th className="r">Share</th><th className="r">Per 100 kg</th></tr></thead><tbody>
+              {s.recipe.map((r,i)=><tr key={i}><td>{r.comp}</td><td className="r mono">{r.pct}%</td><td className="r mono">{kgs(r.pct)} kg</td></tr>)}
+              <tr><td>Carrier ({s.carrier})</td><td className="r mono">{kgs(100-ps)}%</td><td className="r mono">{kgs(100-ps)} kg</td></tr></tbody></table></div></div>
+          <div><div className="eyebrow" style={{marginBottom:6}}>Every batch of this shade</div>
+            {bs.length?<div className="tw"><table className="t"><thead><tr><th>Batch</th><th>Made</th><th className="r">Charged</th><th className="r">ΔE</th><th>Against recipe</th><th>Went to</th></tr></thead><tbody>
+              {bs.map(b=>{ const a=adherence(st,b); const to=Object.values(st.dispatches).filter(d=>d.batch===b.id).map(d=>d.customer); return (
+                <tr key={b.id}><td className="mono">{b.id}</td><td>{fdate(b.date)}</td><td className="r mono">{kgs(charged(b))} kg</td>
+                  <td className="r mono">{b.qc?b.qc.de:<span className="dim">none</span>}</td>
+                  <td>{a?(a.worst<=5?<span className="tag ok">within 5%</span>:<span className="tag warn">off by {a.worst>=999?'extra item':a.worst.toFixed(1)+'%'}</span>):<span className="dim">n/a</span>}</td>
+                  <td>{to.length?to.join(', '):<span className="dim">in stock</span>}</td></tr>); })}
+            </tbody></table></div>:<div className="dim">No batches of this shade yet.</div>}</div>
+        </div></div>}
+    </div></div>);
+}
+
+/* ================= Trace ================= */
+function suspectFor(st,b){ if(!b) return null; const col=b.lots.find(l=>{ const lot=st.lots[l.lot]; return lot&&lot.comp!=='carrier'&&lot.comp!=='PE wax'; }); return (col||b.lots[0]||{}).lot||null; }
+function Trace({st,focus}){
+  const [q,setQ]=useState(''); const [dn,setDn]=useState('DN-2609-407'); const [lot,setLot]=useState(null);
+  useEffect(()=>{ if(focus&&focus.tab==='trace'&&focus.id&&st.dispatches[focus.id]) setDn(focus.id); },[focus]);
+  const d=st.dispatches[dn]; const b=d&&st.batches[d.batch];
+  useEffect(()=>{ setLot(suspectFor(st,b)); },[dn]);
+  const list=Object.values(st.dispatches).sort((a,b2)=>dkey(b2.date)-dkey(a.date)).filter(x=>!q||[x.dn,x.customer,x.shade,x.batch].join(' ').toLowerCase().includes(q.toLowerCase()));
+  const L=lot&&st.lots[lot];
+  const hitB=lot?Object.values(st.batches).filter(x=>x.lots.some(l=>l.lot===lot)).sort((a,b2)=>dkey(a.date)-dkey(b2.date)):[];
+  const rows=[]; hitB.forEach(x=>{ const ds=Object.values(st.dispatches).filter(y=>y.batch===x.id); if(ds.length) ds.forEach(y=>rows.push({b:x,d:y})); else rows.push({b:x,d:null}); });
+  const custs=new Set(rows.filter(r=>r.d).map(r=>r.d.customer)); const kgOut=rows.reduce((a,r)=>a+(r.d?r.d.qty:0),0);
+  const flags=hitB.filter(x=>x.qc&&(!/^pass/i.test(x.qc.dispersion)||x.qc.de>0.9)&&(!b||x.id!==b.id));
+  return (<div>
+    <div className="head"><div><h1>Trace a dispatch</h1><p>A customer rejects a load. Pick the dispatch, see exactly what went into it, then choose the lot you suspect. The recall list is only the dispatches that share that lot.</p></div></div>
+    <div className="split l">
+      <div className="card"><div className="card-b" style={{paddingBottom:10}}><label className="eyebrow" htmlFor="dn-q">Search dispatches</label>
+        <input id="dn-q" className="search" style={{marginTop:6}} placeholder="DN, customer, shade or batch" value={q} onChange={e=>setQ(e.target.value)}/></div>
+        <div className="rows">{list.map(x=><button key={x.dn} className="row" aria-pressed={x.dn===dn} onClick={()=>setDn(x.dn)}>
+          <span style={{minWidth:0}}><span className="t1"><span className="mono">{x.dn}</span>{x.complaint&&<span className="tag crit" style={{marginLeft:8}}>complaint</span>}</span>
+            <span className="t2" style={{display:'block'}}>{x.customer} · {x.shade}</span></span><span className="t2 num">{kgs(x.qty)} kg</span></button>)}</div></div>
+      {d&&<div className="stack">
+        <div className="card"><div className="card-h"><h2>What went into <span className="mono">{d.dn}</span></h2>{d.complaint&&<span className="tag crit">{d.complaint}</span>}</div>
+          <div className="card-b"><div className="gen">
+            <div className="node"><div className="lbl">Dispatched</div><div><b>{kgs(d.qty)} kg</b> of <span className="mono">{d.shade}</span> to {d.customer}</div><div className="dim" style={{fontSize:13}}>{fdate(d.date)}</div></div>
+            {b?<div className="node"><div className="lbl">From batch</div><div className="mono">{b.id}</div>
+              <div className="dim" style={{fontSize:13}}>{b.line} · {fdate(b.date)} · {b.qc?`ΔE ${b.qc.de}, dispersion: ${b.qc.dispersion}`:'no QC reading on record'}</div></div>
+              :<div className="node"><div className="lbl">From batch</div><div className="dim">Batch {d.batch} is not in the record.</div></div>}
+            {b&&<div className="node hot"><div className="lbl">Made from these lots · pick the one you suspect</div>
+              <div className="lotbtns">{b.lots.map(l=>{ const x=st.lots[l.lot]; return <button key={l.lot} className="lotbtn" aria-pressed={lot===l.lot} onClick={()=>setLot(l.lot)}>
+                <span><span className="mono">{l.lot}</span><span className="dim"> · {x?x.material:'not in register'}</span></span><span className="mono dim">{kgs(l.kg)} kg</span></button>; })}</div></div>}
+          </div></div></div>
+        {L&&<div className="radius">
+          <div className="eyebrow" style={{color:'var(--crit)'}}>If lot {lot} is the cause</div>
+          <div style={{display:'flex',flexWrap:'wrap',gap:'10px 28px',margin:'10px 0 12px'}}>
+            <div><div className="big">{hitB.length}</div><div className="dim" style={{fontSize:13}}>{hitB.length===1?'batch':'batches'} used it</div></div>
+            <div><div className="big">{custs.size}</div><div className="dim" style={{fontSize:13}}>{custs.size===1?'customer':'customers'} received it</div></div>
+            <div><div className="big">{kgs(kgOut)}</div><div className="dim" style={{fontSize:13}}>kg shipped out</div></div></div>
+          <div style={{fontSize:13.5,marginBottom:10}}>{L.material} from {L.supplier}, received {fdate(L.date)}. CoA on file: {L.coa}.</div>
+          <div className="tw"><table className="t"><thead><tr><th>Batch</th><th>Shade</th><th>Dispatch</th><th>Customer</th><th className="r">kg</th></tr></thead><tbody>
+            {rows.map((r,i)=><tr key={i}><td className="mono">{r.b.id}</td><td className="mono">{r.b.shade}</td><td className="mono">{r.d?r.d.dn:'in stock'}</td><td>{r.d?r.d.customer:<span className="dim">not shipped</span>}</td><td className="r mono">{r.d?kgs(r.d.qty):kgs(r.b.output-shippedOf(st,r.b.id))}</td></tr>)}</tbody></table></div>
+          {flags.map(x=><div key={x.id} className="chk warn" style={{marginTop:10}}><span className="ic">!</span><div className="body">Batch <span className="mono">{x.id}</span> from the same lot was logged at QC with <b>{x.qc.dispersion}</b>{x.qc.de>0.9?` and ΔE ${x.qc.de}`:''}. The record already held this signal on {fdate(x.qc.date)}.</div></div>)}
+        </div>}
+      </div>}
+    </div></div>);
+}
+
+/* ================= Certificates ================= */
+function Certs({st,focus}){
+  const [sel,setSel]=useState('B-TS02-0918-B'); const [prov,setProv]=useState(null);
+  useEffect(()=>{ if(focus&&focus.tab==='certs'&&focus.id&&st.batches[focus.id]){ setSel(focus.id); setProv(null);} },[focus]);
+  const list=Object.values(st.batches).sort((a,b)=>dkey(b.date)-dkey(a.date));
+  const b=st.batches[sel]||list[0]; const s=b&&st.shades[b.shade]; const q=b&&b.qc;
+  const ds=b?Object.values(st.dispatches).filter(d=>d.batch===b.id):[];
+  const rows=b?[
+    ['Shade',s?`${s.code} · ${s.name}`:b.shade,s&&s.src],
+    ['Batch',b.id,b.src],
+    ['Date of manufacture',fdate(b.date),b.src],
+    ['Customer',ds.length?ds.map(d=>d.customer).join(', '):'Not dispatched yet',ds[0]&&ds[0].src],
+    ['Carrier',s?s.carrier:'',s&&s.src],
+    ['Recommended let-down',s?s.ldr:'',s&&s.src],
+    ['ΔE vs master standard',q?String(q.de):null,q&&q.src],
+    ['MFI',q?q.mfi:null,q&&q.src],
+    ['Dispersion',q?q.dispersion:null,q&&q.src],
+    ['Moisture',q?q.moisture:null,q&&q.src],
+    ['Result',q?q.result:null,q&&q.src],
+    ['Raw material lots',b.lots.map(l=>l.lot).join(', '),b.src]
+  ]:[];
+  return (<div>
+    <div className="head"><div><h1>Certificates from the record</h1><p>Nothing on the certificate is typed. Each line comes from a sheet that was photographed and confirmed, and you can click any value to see which one. If a reading was never taken, the certificate refuses to print a number for it.</p></div></div>
+    <div className="split l">
+      <div className="card"><div className="card-b" style={{paddingBottom:8}}><div className="eyebrow">Batches</div></div>
+        <div className="rows">{list.map(x=><button key={x.id} className="row" aria-pressed={b&&x.id===b.id} onClick={()=>{setSel(x.id);setProv(null);}}>
+          <span style={{minWidth:0}}><span className="t1 mono">{x.id}</span><span className="t2" style={{display:'block'}}>{x.shade} · {fdate(x.date)}</span></span>
+          {x.qc?<span className="tag ok">QC</span>:<span className="tag warn">no QC</span>}</button>)}</div></div>
+      {b&&<div className="card"><div className="card-b">
+        {!q&&<div className="blockd"><b>Cannot issue yet.</b> There is no QC reading on record for this batch, so the test values below are blank rather than guessed. Capture its QC register page and the certificate completes itself.</div>}
+        <div className="cert">
+          <div className="wm" aria-hidden="true"><span>SAMPLE DATA</span></div>
+          <div className="cert-h"><div className="co">Welset Plast Extrusions Pvt. Ltd.</div><div className="ti">Certificate of analysis · masterbatch</div></div>
+          {rows.map(([k,v,src],i)=><div key={i} className="crow"><span className="k">{k}</span>
+            {v==null?<span className="tag warn">not recorded</span>:<button className="prov" aria-expanded={prov===i} onClick={()=>setProv(prov===i?null:i)}>{v}</button>}</div>)}
+          <div className="dim" style={{fontSize:12,marginTop:12}}>Every dotted value opens its source. Demo certificate built from sample records.</div>
+        </div>
+        {prov!=null&&rows[prov]&&<div className="provbox"><div className="eyebrow" style={{marginBottom:3}}>Where "{rows[prov][0]}" came from</div>{provText(rows[prov][2])}</div>}
+      </div></div>}
+    </div></div>);
+}
+
+/* ================= Material ================= */
+function Material({st,focus}){
+  const [open,setOpen]=useState(null);
+  useEffect(()=>{ if(focus&&focus.tab==='material'&&focus.id&&st.lots[focus.id]) setOpen(focus.id); },[focus]);
+  const lots=Object.values(st.lots).sort((a,b)=>dkey(b.date)-dkey(a.date));
+  const bs=Object.values(st.batches);
+  const tCharged=bs.reduce((a,b)=>a+charged(b),0), tOut=bs.reduce((a,b)=>a+b.output,0), tPurge=bs.reduce((a,b)=>a+b.purge,0);
+  const tRecv=lots.reduce((a,l)=>a+l.qty,0);
+  const gap=tCharged-tOut-tPurge;
+  return (<div>
+    <div className="head"><div><h1>Material in and out</h1><p>Every lot that came through the gate, how much of it has been charged into batches, and where it went. Kilograms cannot vanish, so what does not add up is shown, not hidden.</p></div></div>
+    <div className="kv" style={{marginBottom:16}}>
+      <div><div className="eyebrow">Received</div><div className="v">{kgs(tRecv)} kg</div></div>
+      <div><div className="eyebrow">Charged to batches</div><div className="v">{kgs(tCharged)} kg</div></div>
+      <div><div className="eyebrow">Good output</div><div className="v">{kgs(tOut)} kg</div></div>
+      <div><div className="eyebrow">Purge and start-up</div><div className="v">{kgs(tPurge)} kg · {tCharged?(tPurge/tCharged*100).toFixed(1):'0.0'}%</div></div>
+      <div><div className="eyebrow">Unaccounted</div><div className="v" style={{color:Math.abs(gap)>0.5?'var(--crit)':'var(--ok)'}}>{kgs(gap)} kg</div></div>
+    </div>
+    <div className="card"><div className="tw"><table className="t">
+      <thead><tr><th>Lot</th><th>Material</th><th>Supplier</th><th>Received</th><th className="r">Qty</th><th>Charged</th><th className="r">Left</th><th className="r">Batches</th></tr></thead>
+      <tbody>{lots.map(l=>{ const u=usedOf(st,l.id); const pct=l.qty?Math.min(100,u/l.qty*100):0; const used=bs.filter(b=>b.lots.some(x=>x.lot===l.id)); const isOpen=open===l.id; return (<React.Fragment key={l.id}>
+        <tr className="click" onClick={()=>setOpen(isOpen?null:l.id)} aria-expanded={isOpen}><td className="mono">{l.id}{l.src&&l.src.mode!=='seed'&&<span className="tag acc" style={{marginLeft:6}}>new</span>}</td><td>{l.material}</td><td>{l.supplier}</td><td>{fdate(l.date)}</td>
+          <td className="r mono">{kgs(l.qty)}</td><td><div style={{display:'flex',gap:8,alignItems:'center'}}><div className="meter" style={{flex:1}} role="img" aria-label={`${pct.toFixed(0)}% charged`}><i style={{width:pct+'%'}}></i></div><span className="mono dim" style={{fontSize:12,minWidth:44,textAlign:'right'}}>{kgs(u)}</span></div></td>
+          <td className="r mono">{kgs(l.qty-u)}</td><td className="r mono">{used.length}</td></tr>
+        {isOpen&&<tr><td colSpan={8} style={{background:'var(--sunk)'}}>
+          {used.length?<div className="stack" style={{gap:6}}><div className="dim" style={{fontSize:13}}>CoA on file: {l.coa}. Charged into:</div>
+            {used.map(b=>{ const k=b.lots.filter(x=>x.lot===l.id).reduce((a,x)=>a+x.kg,0); return <div key={b.id} style={{fontSize:13.5}}><span className="mono">{b.id}</span> · {b.shade} · {fdate(b.date)} · <span className="mono">{kgs(k)} kg</span></div>; })}</div>
+            :<div className="dim" style={{fontSize:13.5}}>Not charged into any batch yet. CoA on file: {l.coa}.</div>}
+        </td></tr>}
+      </React.Fragment>); })}</tbody></table></div></div>
+  </div>);
+}
+
+/* ================= App ================= */
+const STORE='shade-ledger-welset-v1', LANGK='shade-ledger-lang';
+function loadState(){ try{ const s=localStorage.getItem(STORE); if(s){ const o=JSON.parse(s); if(o&&o.lots&&o.shades&&o.batches&&o.dispatches) return o; } }catch(e){} return clone(SEED); }
+const TABS=[['capture','Capture'],['shades','Shades'],['trace','Trace'],['certs','Certificates'],['material','Material']];
+function App(){
+  const [st,setSt]=useState(loadState);
+  const [lang,setLang]=useState(()=>{ try{ return localStorage.getItem(LANGK)==='hi'?'hi':'en'; }catch(e){ return 'en'; } });
+  const [tab,setTab]=useState('capture'); const [focus,setFocus]=useState(null);
+  const [sampler,setSampler]=useSampler();
+  const [askReset,setAskReset]=useState(false); const [gen,setGen]=useState(0);
+  const [toastMsg,setToastMsg]=useState(''); const tRef=useRef(null);
+  useEffect(()=>{ try{ localStorage.setItem(STORE,JSON.stringify(st)); }catch(e){} },[st]);
+  useEffect(()=>{ try{ localStorage.setItem(LANGK,lang); }catch(e){} },[lang]);
+  const toast=m=>{ setToastMsg(m); clearTimeout(tRef.current); tRef.current=setTimeout(()=>setToastMsg(''),2600); };
+  const go=(t,id)=>{ setTab(t); setFocus({tab:t,id,n:Date.now()}); window.scrollTo(0,0); };
+  function doReset(){ setSt(clone(SEED)); setGen(g=>g+1); setAskReset(false); setFocus(null); setTab('capture'); toast('Demo data reset'); }
+  return (<>
+    <div className="bar">
+      <div className="bar-in">
+        <div className="brand">
+          <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 22 21H2Z" fill="none" stroke="var(--accent)" strokeWidth="1.6"/><path d="M12 9.5 17 21H7Z" fill="var(--accent)" opacity=".3"/></svg>
+          <h1 style={{fontSize:17}}>Shade Ledger<small>by ARQ ONE AI Labs</small></h1>
+        </div>
+        <div className="who">
+          <span>Demo prepared for <b style={{color:'var(--ink)'}}>Welset Plast Extrusions</b></span>
+          <span className="pill">Sample data</span>
+          {askReset?<span style={{display:'inline-flex',gap:6,alignItems:'center'}}><span>Clear everything captured?</span>
+              <button className="btn btn-s" onClick={doReset}>Reset</button><button className="btn btn-s" onClick={()=>setAskReset(false)}>Cancel</button></span>
+            :<button className="btn btn-s" onClick={()=>setAskReset(true)}>Reset demo</button>}
+        </div>
+      </div>
+      <nav className="tabs" role="tablist">{TABS.map(([k,l])=><button key={k} className="tab" role="tab" aria-selected={tab===k} onClick={()=>{setTab(k);setFocus(null);}}>{l}</button>)}</nav>
+    </div>
+    <main className="wrap">
+      {tab==='capture'&&<Capture key={gen} st={st} setSt={setSt} go={go} sampler={sampler} setSampler={setSampler} lang={lang} setLang={setLang} toast={toast}/>}
+      {tab==='shades'&&<Shades st={st} focus={focus}/>}
+      {tab==='trace'&&<Trace st={st} focus={focus}/>}
+      {tab==='certs'&&<Certs st={st} focus={focus}/>}
+      {tab==='material'&&<Material st={st} focus={focus}/>}
+    </main>
+    <div className="foot">Working demo. Customers, suppliers, lots and readings are sample data invented for this demonstration. Photo reading uses Claude; every check, total and certificate value is plain arithmetic on the confirmed record.</div>
+    {toastMsg&&<div className="toast" role="status">{toastMsg}</div>}
+  </>);
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>

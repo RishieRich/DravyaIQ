@@ -1,0 +1,93 @@
+[
+  {
+    "lot_id": "PB153-2408",
+    "material": "Pigment Blue 15:3",
+    "component": "PB15:3",
+    "supplier": "Navkar Colourchem",
+    "qty_kg": 250,
+    "received_on": "22/08/2026",
+    "coa_value": "Strength 102.4%",
+    "source": {
+      "doc_type": "inward",
+      "mode": "seed"
+    }
+  },
+  {
+    "lot_id": "PY83-2407",
+    "material": "Pigment Yellow 83",
+    "component": "PY83",
+    "supplier": "Navkar Colourchem",
+    "qty_kg": 200,
+    "received_on": "30/07/2026",
+    "coa_value": "Strength 99.6%",
+    "source": {
+      "doc_type": "inward",
+      "mode": "seed"
+    }
+  },
+  {
+    "lot_id": "CB-N330-2409",
+    "material": "Carbon black N330",
+    "component": "CB N330",
+    "supplier": "Kutch Carbon",
+    "qty_kg": 1000,
+    "received_on": "02/09/2026",
+    "coa_value": "Iodine no. 82 mg/g",
+    "source": {
+      "doc_type": "inward",
+      "mode": "seed"
+    }
+  },
+  {
+    "lot_id": "TIO2-R902-2408",
+    "material": "Titanium dioxide, rutile",
+    "component": "TiO2",
+    "supplier": "Meridian Minerals",
+    "qty_kg": 1000,
+    "received_on": "28/08/2026",
+    "coa_value": "Purity 98.2%",
+    "source": {
+      "doc_type": "inward",
+      "mode": "seed"
+    }
+  },
+  {
+    "lot_id": "LL-MB-2409",
+    "material": "LLDPE carrier, MB grade",
+    "component": "carrier",
+    "supplier": "Sahyadri Polymers",
+    "qty_kg": 5000,
+    "received_on": "01/09/2026",
+    "coa_value": "MFI 20 g/10min",
+    "source": {
+      "doc_type": "inward",
+      "mode": "seed"
+    }
+  },
+  {
+    "lot_id": "PP-H-2408",
+    "material": "PP homopolymer carrier",
+    "component": "carrier",
+    "supplier": "Sahyadri Polymers",
+    "qty_kg": 3000,
+    "received_on": "20/08/2026",
+    "coa_value": "MFI 12 g/10min",
+    "source": {
+      "doc_type": "inward",
+      "mode": "seed"
+    }
+  },
+  {
+    "lot_id": "WAX-PE-2407",
+    "material": "PE wax dispersant",
+    "component": "PE wax",
+    "supplier": "Deccan Additives",
+    "qty_kg": 400,
+    "received_on": "25/07/2026",
+    "coa_value": "Drop point 105°C",
+    "source": {
+      "doc_type": "inward",
+      "mode": "seed"
+    }
+  }
+]

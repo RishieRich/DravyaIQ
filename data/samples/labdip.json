@@ -1,0 +1,143 @@
+{
+  "doc_type": "labdip",
+  "title_en": "Lab dip sheet",
+  "fields": [
+    {
+      "key": "shade",
+      "label_en": "Shade code",
+      "hint": "shade code"
+    },
+    {
+      "key": "name",
+      "label_en": "Shade name",
+      "hint": null
+    },
+    {
+      "key": "customer",
+      "label_en": "Customer",
+      "hint": null
+    },
+    {
+      "key": "carrier",
+      "label_en": "Carrier",
+      "hint": "carrier resin"
+    },
+    {
+      "key": "recipe",
+      "label_en": "Recipe",
+      "hint": "each pigment or additive with its percent, written as 'NAME n%, NAME n%'"
+    },
+    {
+      "key": "ldr",
+      "label_en": "Let-down ratio",
+      "hint": null
+    },
+    {
+      "key": "de",
+      "label_en": "ΔE vs standard",
+      "hint": "the delta E number"
+    },
+    {
+      "key": "result",
+      "label_en": "Result",
+      "hint": "Approved or Rejected; read the stamp if there is one"
+    }
+  ],
+  "prepared_reading": [
+    {
+      "key": "shade",
+      "value": "WS-6214",
+      "confidence": "high"
+    },
+    {
+      "key": "name",
+      "value": "Coral Red",
+      "confidence": "high"
+    },
+    {
+      "key": "customer",
+      "value": "Ashapura Plast",
+      "confidence": "high"
+    },
+    {
+      "key": "carrier",
+      "value": "PP homopolymer",
+      "confidence": "high"
+    },
+    {
+      "key": "recipe",
+      "value": "PR57:1 3.2%, TiO2 1.5%, PE wax 1.8%",
+      "confidence": "high"
+    },
+    {
+      "key": "ldr",
+      "value": "1:50 (2%)",
+      "confidence": "high"
+    },
+    {
+      "key": "de",
+      "value": "0.74",
+      "confidence": "low"
+    },
+    {
+      "key": "result",
+      "value": "Approved",
+      "confidence": "high"
+    }
+  ],
+  "paper": {
+    "title": "LAB DIP / SHADE MATCH",
+    "form": "Lab  ·  Form F-07",
+    "rows": [
+      {
+        "label": "Shade code",
+        "value": "WS-6214",
+        "mark": null
+      },
+      {
+        "label": "Shade name",
+        "value": "Coral Red",
+        "mark": null
+      },
+      {
+        "label": "Customer",
+        "value": "Ashapura Plast",
+        "mark": null
+      },
+      {
+        "label": "Carrier",
+        "value": "PP homopolymer",
+        "mark": null
+      },
+      {
+        "label": "Recipe",
+        "value": "PR57:1 3.2%,  TiO2 1.5%,  PE wax 1.8%",
+        "mark": null
+      },
+      {
+        "label": "Let-down",
+        "value": "1:50  (2%)",
+        "mark": null
+      },
+      {
+        "label": "ΔE vs std",
+        "value": "0.74",
+        "mark": null
+      },
+      {
+        "label": "Result",
+        "value": "",
+        "mark": {
+          "stamp": "APPROVED"
+        }
+      },
+      {
+        "label": "Chemist",
+        "value": "",
+        "mark": {
+          "sign": true
+        }
+      }
+    ]
+  }
+}

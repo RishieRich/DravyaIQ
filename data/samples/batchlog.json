@@ -1,0 +1,148 @@
+{
+  "doc_type": "batchlog",
+  "title_en": "Batch log sheet",
+  "fields": [
+    {
+      "key": "batch",
+      "label_en": "Batch no.",
+      "hint": null
+    },
+    {
+      "key": "line",
+      "label_en": "Line / shift",
+      "hint": null
+    },
+    {
+      "key": "shade",
+      "label_en": "Shade code",
+      "hint": null
+    },
+    {
+      "key": "lots",
+      "label_en": "Lots charged",
+      "hint": "every lot number with its weight, written as 'LOT n kg; LOT n kg'"
+    },
+    {
+      "key": "output",
+      "label_en": "Output",
+      "hint": "output weight with unit"
+    },
+    {
+      "key": "purge",
+      "label_en": "Purge / start-up loss",
+      "hint": "if a value is struck out, use the corrected value"
+    },
+    {
+      "key": "date",
+      "label_en": "Date",
+      "hint": null
+    }
+  ],
+  "prepared_reading": [
+    {
+      "key": "batch",
+      "value": "B-TS01-0925-A",
+      "confidence": "high"
+    },
+    {
+      "key": "line",
+      "value": "TS-01, Shift A",
+      "confidence": "high"
+    },
+    {
+      "key": "shade",
+      "value": "WS-4471",
+      "confidence": "high"
+    },
+    {
+      "key": "lots",
+      "value": "PB153-2480 18.2 kg; TIO2-R902-2408 12 kg; WAX-PE-2407 8 kg; LL-MB-2409 361.8 kg",
+      "confidence": "high"
+    },
+    {
+      "key": "output",
+      "value": "396 kg",
+      "confidence": "high"
+    },
+    {
+      "key": "purge",
+      "value": "4 kg",
+      "confidence": "low"
+    },
+    {
+      "key": "date",
+      "value": "25/09/2026",
+      "confidence": "high"
+    }
+  ],
+  "paper": {
+    "title": "EXTRUDER BATCH LOG",
+    "form": "Production  ·  Form F-11",
+    "rows": [
+      {
+        "label": "Date",
+        "value": "25/09/2026",
+        "mark": null
+      },
+      {
+        "label": "Line / shift",
+        "value": "TS-01 / A",
+        "mark": null
+      },
+      {
+        "label": "Batch no.",
+        "value": "B-TS01-0925-A",
+        "mark": null
+      },
+      {
+        "label": "Shade",
+        "value": "WS-4471",
+        "mark": null
+      },
+      {
+        "label": "Lots charged",
+        "value": "PB153-2480      18.2 kg",
+        "mark": null
+      },
+      {
+        "label": "",
+        "value": "TIO2-R902-2408   12 kg",
+        "mark": null
+      },
+      {
+        "label": "",
+        "value": "WAX-PE-2407      8 kg",
+        "mark": null
+      },
+      {
+        "label": "",
+        "value": "LL-MB-2409       361.8 kg",
+        "mark": null
+      },
+      {
+        "label": "Output",
+        "value": "396 kg",
+        "mark": null
+      },
+      {
+        "label": "Purge / start-up",
+        "value": "4 kg",
+        "mark": {
+          "strike": "5 kg"
+        }
+      },
+      {
+        "label": "Remarks",
+        "value": "रंग ठीक है",
+        "mark": null
+      },
+      {
+        "label": "Operator",
+        "value": "",
+        "mark": {
+          "sign": true
+        }
+      }
+    ]
+  }
+}

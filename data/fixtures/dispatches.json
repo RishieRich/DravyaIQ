@@ -1,0 +1,80 @@
+[
+  {
+    "dispatch_note": "DN-2609-402",
+    "customer": "Sagar Polypack",
+    "shade_code": "WS-4471",
+    "batch_id": "B-TS02-0908-B",
+    "qty_kg": 392,
+    "dispatched_on": "09/09/2026",
+    "complaint": null,
+    "source": {
+      "doc_type": "dispatch",
+      "mode": "seed"
+    }
+  },
+  {
+    "dispatch_note": "DN-2609-407",
+    "customer": "Krishna Pipes",
+    "shade_code": "WS-0901",
+    "batch_id": "B-TS01-0910-A",
+    "qty_kg": 1188,
+    "dispatched_on": "11/09/2026",
+    "complaint": "Black specks in 110 mm pipe",
+    "source": {
+      "doc_type": "dispatch",
+      "mode": "seed"
+    }
+  },
+  {
+    "dispatch_note": "DN-2609-411",
+    "customer": "Vardhman Moulders",
+    "shade_code": "WS-0901",
+    "batch_id": "B-TS01-0912-B",
+    "qty_kg": 594,
+    "dispatched_on": "13/09/2026",
+    "complaint": null,
+    "source": {
+      "doc_type": "dispatch",
+      "mode": "seed"
+    }
+  },
+  {
+    "dispatch_note": "DN-2609-414",
+    "customer": "Vardhman Moulders",
+    "shade_code": "WS-3108",
+    "batch_id": "B-TS02-0915-A",
+    "qty_kg": 296,
+    "dispatched_on": "16/09/2026",
+    "complaint": null,
+    "source": {
+      "doc_type": "dispatch",
+      "mode": "seed"
+    }
+  },
+  {
+    "dispatch_note": "DN-2609-419",
+    "customer": "Sagar Polypack",
+    "shade_code": "WS-4471",
+    "batch_id": "B-TS02-0918-B",
+    "qty_kg": 294,
+    "dispatched_on": "19/09/2026",
+    "complaint": null,
+    "source": {
+      "doc_type": "dispatch",
+      "mode": "seed"
+    }
+  },
+  {
+    "dispatch_note": "DN-2609-423",
+    "customer": "Shivam Containers",
+    "shade_code": "WS-0002",
+    "batch_id": "B-TS01-0920-A",
+    "qty_kg": 494,
+    "dispatched_on": "21/09/2026",
+    "complaint": null,
+    "source": {
+      "doc_type": "dispatch",
+      "mode": "seed"
+    }
+  }
+]

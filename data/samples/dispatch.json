@@ -1,0 +1,116 @@
+{
+  "doc_type": "dispatch",
+  "title_en": "Dispatch slip",
+  "fields": [
+    {
+      "key": "dn",
+      "label_en": "Dispatch note no.",
+      "hint": null
+    },
+    {
+      "key": "customer",
+      "label_en": "Customer",
+      "hint": null
+    },
+    {
+      "key": "shade",
+      "label_en": "Shade code",
+      "hint": null
+    },
+    {
+      "key": "batch",
+      "label_en": "Batch no.",
+      "hint": null
+    },
+    {
+      "key": "qty",
+      "label_en": "Quantity",
+      "hint": "weight with unit"
+    },
+    {
+      "key": "date",
+      "label_en": "Date",
+      "hint": null
+    }
+  ],
+  "prepared_reading": [
+    {
+      "key": "dn",
+      "value": "DN-2609-431",
+      "confidence": "high"
+    },
+    {
+      "key": "customer",
+      "value": "Sagar Polypack",
+      "confidence": "high"
+    },
+    {
+      "key": "shade",
+      "value": "WS-4471",
+      "confidence": "high"
+    },
+    {
+      "key": "batch",
+      "value": "B-TS01-0925-A",
+      "confidence": "high"
+    },
+    {
+      "key": "qty",
+      "value": "396 kg",
+      "confidence": "high"
+    },
+    {
+      "key": "date",
+      "value": "26/09/2026",
+      "confidence": "high"
+    }
+  ],
+  "paper": {
+    "title": "DISPATCH SLIP",
+    "form": "Despatch  ·  Form F-03",
+    "rows": [
+      {
+        "label": "Date",
+        "value": "26/09/2026",
+        "mark": null
+      },
+      {
+        "label": "DN no.",
+        "value": "DN-2609-431",
+        "mark": null
+      },
+      {
+        "label": "Customer",
+        "value": "Sagar Polypack",
+        "mark": null
+      },
+      {
+        "label": "Shade",
+        "value": "WS-4471",
+        "mark": null
+      },
+      {
+        "label": "Batch",
+        "value": "B-TS01-0925-A",
+        "mark": null
+      },
+      {
+        "label": "Qty",
+        "value": "396 kg   (16 bags)",
+        "mark": null
+      },
+      {
+        "label": "Vehicle",
+        "value": "MH-04-KF-2217",
+        "mark": null
+      },
+      {
+        "label": "Prepared by",
+        "value": "",
+        "mark": {
+          "sign": true
+        }
+      }
+    ]
+  }
+}

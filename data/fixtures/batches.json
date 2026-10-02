@@ -1,0 +1,170 @@
+[
+  {
+    "batch_id": "B-TS02-0908-B",
+    "line_shift": "TS-02, Shift B",
+    "shade_code": "WS-4471",
+    "made_on": "08/09/2026",
+    "charges": [
+      {
+        "lot_id": "PB153-2408",
+        "kg": 18.4
+      },
+      {
+        "lot_id": "TIO2-R902-2408",
+        "kg": 12
+      },
+      {
+        "lot_id": "WAX-PE-2407",
+        "kg": 8
+      },
+      {
+        "lot_id": "LL-MB-2409",
+        "kg": 361.6
+      }
+    ],
+    "output_kg": 392,
+    "purge_kg": 8,
+    "source": {
+      "doc_type": "batchlog",
+      "mode": "seed"
+    }
+  },
+  {
+    "batch_id": "B-TS01-0910-A",
+    "line_shift": "TS-01, Shift A",
+    "shade_code": "WS-0901",
+    "made_on": "10/09/2026",
+    "charges": [
+      {
+        "lot_id": "CB-N330-2409",
+        "kg": 480
+      },
+      {
+        "lot_id": "WAX-PE-2407",
+        "kg": 24
+      },
+      {
+        "lot_id": "LL-MB-2409",
+        "kg": 702
+      }
+    ],
+    "output_kg": 1188,
+    "purge_kg": 12,
+    "source": {
+      "doc_type": "batchlog",
+      "mode": "seed"
+    }
+  },
+  {
+    "batch_id": "B-TS01-0912-B",
+    "line_shift": "TS-01, Shift B",
+    "shade_code": "WS-0901",
+    "made_on": "12/09/2026",
+    "charges": [
+      {
+        "lot_id": "CB-N330-2409",
+        "kg": 240
+      },
+      {
+        "lot_id": "WAX-PE-2407",
+        "kg": 12
+      },
+      {
+        "lot_id": "LL-MB-2409",
+        "kg": 348
+      }
+    ],
+    "output_kg": 594,
+    "purge_kg": 6,
+    "source": {
+      "doc_type": "batchlog",
+      "mode": "seed"
+    }
+  },
+  {
+    "batch_id": "B-TS02-0915-A",
+    "line_shift": "TS-02, Shift A",
+    "shade_code": "WS-3108",
+    "made_on": "15/09/2026",
+    "charges": [
+      {
+        "lot_id": "PY83-2407",
+        "kg": 11.4
+      },
+      {
+        "lot_id": "TIO2-R902-2408",
+        "kg": 6
+      },
+      {
+        "lot_id": "WAX-PE-2407",
+        "kg": 4.5
+      },
+      {
+        "lot_id": "PP-H-2408",
+        "kg": 278.1
+      }
+    ],
+    "output_kg": 296,
+    "purge_kg": 4,
+    "source": {
+      "doc_type": "batchlog",
+      "mode": "seed"
+    }
+  },
+  {
+    "batch_id": "B-TS02-0918-B",
+    "line_shift": "TS-02, Shift B",
+    "shade_code": "WS-4471",
+    "made_on": "18/09/2026",
+    "charges": [
+      {
+        "lot_id": "PB153-2408",
+        "kg": 13.8
+      },
+      {
+        "lot_id": "TIO2-R902-2408",
+        "kg": 9
+      },
+      {
+        "lot_id": "WAX-PE-2407",
+        "kg": 6
+      },
+      {
+        "lot_id": "LL-MB-2409",
+        "kg": 271.2
+      }
+    ],
+    "output_kg": 294,
+    "purge_kg": 6,
+    "source": {
+      "doc_type": "batchlog",
+      "mode": "seed"
+    }
+  },
+  {
+    "batch_id": "B-TS01-0920-A",
+    "line_shift": "TS-01, Shift A",
+    "shade_code": "WS-0002",
+    "made_on": "20/09/2026",
+    "charges": [
+      {
+        "lot_id": "TIO2-R902-2408",
+        "kg": 350
+      },
+      {
+        "lot_id": "WAX-PE-2407",
+        "kg": 12.5
+      },
+      {
+        "lot_id": "PP-H-2408",
+        "kg": 137.5
+      }
+    ],
+    "output_kg": 494,
+    "purge_kg": 6,
+    "source": {
+      "doc_type": "batchlog",
+      "mode": "seed"
+    }
+  }
+]
