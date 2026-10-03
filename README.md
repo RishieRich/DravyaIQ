@@ -1,3 +1,4 @@
+Date : 03/10/2026
 # Dravya IQ
 
 The material record for masterbatch plants: photograph the five paper sheets the floor already fills, confirm what the reader was unsure of, and get a checked, traceable record that answers complaints, builds certificates and shows where every kilogram went. Part of the ARQ ONE MSME operating system.
